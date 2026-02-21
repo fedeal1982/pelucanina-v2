@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        h1 { color: #667eea; font-size: 32px; }
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .alert { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        th { padding: 15px; text-align: left; font-weight: 600; }
+        td { padding: 15px; border-bottom: 1px solid #e9ecef; vertical-align: middle; }
+        tbody tr:hover { background: #f8f9fa; }
+        .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .badge-admin { background: #667eea; color: white; }
+        .badge-empleado { background: #e9ecef; color: #495057; }
+        .badge-activo { background: #d4edda; color: #155724; }
+        .badge-inactivo { background: #f8d7da; color: #721c24; }
+        .tu-usuario {
+            background: #fff3cd;
+            font-weight: bold;
+        }
+        .fecha {
+            font-size: 13px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Volver al inicio</a>
+
+        <div class="header">
+            <h1>👥 Gestión de Usuarios</h1>
+            <a href="/register" class="btn btn-primary">➕ Nuevo Usuario</a>
+        </div>
+
+        <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
+        <div th:if="${mensajeError}" class="alert alert-error" th:text="${mensajeError}"></div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario : ${usuarios}"
+                    th:classappend="${usuario.username == usuarioActual ? 'tu-usuario' : ''}">
+
+                    <td>
+                        <strong th:text="${usuario.username}">admin</strong>
+                        <span th:if="${usuario.username == usuarioActual}"
+                              style="font-size: 12px; color: #856404;"> (vos)</span>
+                    </td>
+
+                    <td th:text="${usuario.nombreCompleto}">Juan Pérez</td>
+
+                    <td>
+                        <span th:if="${usuario.rol == 'ADMIN'}" class="badge badge-admin">⭐ ADMIN</span>
+                        <span th:if="${usuario.rol == 'EMPLEADO'}" class="badge badge-empleado">👤 EMPLEADO</span>
+                    </td>
+
+                    <td>
+                        <span th:if="${usuario.activo}" class="badge badge-activo">✅ Activo</span>
+                        <span th:if="${!usuario.activo}" class="badge badge-inactivo">🔴 Inactivo</span>
+                    </td>
+
+                    <td>
+                        <span class="fecha"
+                              th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy')}">
+                            01/01/2025
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="actions" th:if="${usuario.username != usuarioActual}">
+                            <!-- Activar / Desactivar -->
+                            <a th:if="${usuario.activo}"
+                               th:href="@{/usuarios/desactivar/{id}(id=${usuario.id})}"
+                               class="btn btn-danger"
+                               onclick="return confirm('¿Desactivar este usuario?')">
+                               🔴 Desactivar
+                            </a>
+                            <a th:if="${!usuario.activo}"
+                               th:href="@{/usuarios/activar/{id}(id=${usuario.id})}"
+                               class="btn btn-success">
+                               ✅ Activar
+                            </a>
+
+                            <!-- Cambiar rol -->
+                            <a th:href="@{/usuarios/cambiar-rol/{id}(id=${usuario.id})}"
+                               class="btn btn-warning"
+                               th:onclick="'return confirm(\'¿Cambiar rol a ' + (${usuario.rol == 'ADMIN'} ? 'EMPLEADO' : 'ADMIN') + '?\')'">
+                               🔄 Cambiar Rol
+                            </a>
+                        </div>
+
+                        <!-- Si es el usuario actual, no mostrar acciones -->
+                        <span th:if="${usuario.username == usuarioActual}"
+                              style="color: #888; font-size: 13px;">—</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

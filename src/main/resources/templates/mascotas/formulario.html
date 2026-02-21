@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${esNuevo ? 'Nueva Mascota' : 'Editar Mascota'}">Formulario Mascota</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/mascotas" class="back-link">← Volver a la lista</a>
+        
+        <h1 th:text="${esNuevo ? '➕ Nueva Mascota' : '✏️ Editar Mascota'}">Formulario</h1>
+
+        <form th:action="${esNuevo ? '/mascotas' : '/mascotas/editar/' + mascota.numCliente}" 
+              method="post" th:object="${mascota}">
+
+            <!-- Sección: Datos de la Mascota -->
+            <div class="section">
+                <div class="section-title">🐕 Datos de la Mascota</div>
+
+                <div class="form-group">
+                    <label for="nombre" class="required">Nombre</label>
+                    <input type="text" id="nombre" th:field="*{nombre}" 
+                           placeholder="Ej: Max" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="razaId" class="required">Raza</label>
+                    <select id="razaId" name="razaId" required>
+                        <option value="">Seleccione una raza</option>
+                        <option th:each="raza : ${razas}" 
+                                th:value="${raza.idRaza}" 
+                                th:text="${raza.nombreRaza}"
+                                th:selected="${mascota.raza != null && mascota.raza.idRaza == raza.idRaza}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="color">Color</label>
+                    <input type="text" id="color" th:field="*{color}" 
+                           placeholder="Ej: Marrón">
+                </div>
+
+                <div class="form-group">
+                    <label for="alergico">Alérgico</label>
+                    <select id="alergico" th:field="*{alergico}">
+                        <option value="-">-</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="atencionEspecial">Atención Especial</label>
+                    <select id="atencionEspecial" th:field="*{atencionEspecial}">
+                        <option value="-">-</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="observaciones">Observaciones</label>
+                    <textarea id="observaciones" th:field="*{observaciones}" 
+                              placeholder="Notas adicionales sobre la mascota..."></textarea>
+                </div>
+            </div>
+
+            <!-- Sección: Datos del Dueño -->
+            <div class="section">
+                <div class="section-title">👤 Datos del Dueño</div>
+
+                <div class="form-group">
+                    <label for="nombreDuenio" class="required">Nombre</label>
+                    <input type="text" id="nombreDuenio" th:field="*{unduenio.nombre}" 
+                           placeholder="Nombre completo del dueño" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="celDuenio" class="required">Celular</label>
+                    <input type="text" id="celDuenio" th:field="*{unduenio.celDuenio}" 
+                           placeholder="Ej: 3512345678" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion" class="required">Dirección</label>
+                    <input type="text" id="direccion" th:field="*{unduenio.direccion}" 
+                           placeholder="Calle y número" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="codigoPostal">Código Postal</label>
+                    <input type="text" id="codigoPostal" th:field="*{unduenio.codigoPostal}" 
+                           placeholder="Ej: 5000">
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="button-group">
+                <button type="submit" class="btn-primary">
+                    <span th:text="${esNuevo ? '💾 Guardar' : '✅ Actualizar'}">Guardar</span>
+                </button>
+                <button type="button" class="btn-secondary" onclick="window.location.href='/mascotas'">
+                    ❌ Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

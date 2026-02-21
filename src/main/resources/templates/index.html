@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peluquería Canina - Inicio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }			.menu {
+			    display: grid;
+			    grid-template-columns: 1fr 1fr 1fr;
+			    gap: 20px;
+			}
+
+        .menu-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .menu-item .icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .menu-item .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+
+        .menu-item .description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐕 Peluquería Canina</h1>
+        <p class="subtitle">Sistema de Gestión de Mascotas</p>
+
+        <!-- Botón de Logout -->
+        <div style="text-align: right; margin-bottom: 20px;">
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    🚪 Cerrar Sesión
+                </button>
+            </form>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalMascotas}">0</div>
+                <div class="stat-label">Mascotas Registradas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" th:text="${totalEliminadas}">0</div>
+                <div class="stat-label">En Papelera</div>
+            </div>
+        </div>
+
+        <!-- Menú Principal -->
+        <div class="menu">
+            <a href="/mascotas/nueva" class="menu-item">
+                <div class="icon">➕</div>
+                <div class="title">Cargar Datos</div>
+                <div class="description">Registrar nueva mascota</div>
+            </a>
+
+            <a href="/mascotas" class="menu-item">
+                <div class="icon">📋</div>
+                <div class="title">Ver Datos</div>
+                <div class="description">Lista de mascotas</div>
+            </a>
+
+            <a href="/papelera" class="menu-item">
+                <div class="icon">🗑️</div>
+                <div class="title">Papelera</div>
+                <div class="description">Mascotas eliminadas</div>
+            </a>
+
+			<a href="/razas" class="menu-item">
+			    <div class="icon">⚙️</div>
+			    <div class="title">Configuración</div>
+			    <div class="description">Gestionar razas</div>
+			</a>
+			
+			<a href="/usuarios" class="menu-item">
+			    <div class="icon">👥</div>
+			    <div class="title">Usuarios</div>
+			    <div class="description">Gestionar accesos</div>
+			</a>
+        </div>
+
+        <div class="footer">
+            © 2025 Peluquería Canina - Todos los derechos reservados
+        </div>
+    </div>
+</body>
+</html>

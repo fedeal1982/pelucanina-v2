@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${esNuevo ? 'Nueva Raza' : 'Editar Raza'}">Formulario Raza</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 { color: #667eea; margin-bottom: 30px; font-size: 28px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        textarea { resize: vertical; min-height: 100px; }
+        .button-group { display: flex; gap: 15px; margin-top: 30px; }
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102,126,234,0.3); }
+        .btn-secondary { background: #6c757d; color: white; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+        .required::after { content: " *"; color: red; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/razas" class="back-link">← Volver a razas</a>
+
+        <h1 th:text="${esNuevo ? '➕ Nueva Raza' : '✏️ Editar Raza'}">Formulario</h1>
+
+        <form th:action="${esNuevo ? '/razas' : '/razas/editar/' + raza.idRaza}"
+              method="post" th:object="${raza}">
+
+            <div class="form-group">
+                <label class="required">Nombre de la raza</label>
+                <input type="text" th:field="*{nombreRaza}"
+                       placeholder="Ej: Labrador" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label>Descripción</label>
+                <textarea th:field="*{descripcion}"
+                          placeholder="Descripción breve de la raza..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${esNuevo ? '💾 Guardar' : '✅ Actualizar'}">Guardar</button>
+                <a href="/razas" class="btn btn-secondary">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Mascotas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 32px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 13px;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Volver al inicio</a>
+
+        <div class="header">
+            <h1>📋 Lista de Mascotas</h1>
+            <a href="/mascotas/nueva" class="btn btn-primary">➕ Nueva Mascota</a>
+        </div>
+		
+		<!-- Barra de búsqueda -->
+		<form th:action="@{/mascotas}" method="get" style="margin-bottom: 20px; display: flex; gap: 10px;">
+		    <input type="text" name="buscar" th:value="${buscar}"
+		           placeholder="🔍 Buscar por nombre de mascota o dueño..."
+		           style="flex: 1; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 15px;">
+		    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Buscar</button>
+		    <a href="/mascotas" class="btn btn-secondary" style="padding: 12px 24px; text-decoration: none; display: flex; align-items: center;">Limpiar</a>
+		</form>
+
+		<!-- Resultado de búsqueda activa -->
+		<div th:if="${buscar}" style="margin-bottom: 15px; color: #667eea; font-weight: 600;">
+		    Mostrando resultados para: "<span th:text="${buscar}"></span>"
+		    — <span th:text="${mascotas.size()}">0</span> resultado(s)
+		</div>
+
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
+        <div th:if="${mensajeError}" class="alert alert-error" th:text="${mensajeError}"></div>
+
+        <!-- Tabla de mascotas -->
+        <div th:if="${!mascotas.empty}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Raza</th>
+                        <th>Color</th>
+                        <th>Alérgico</th>
+                        <th>Dueño</th>
+                        <th>Celular</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="mascota : ${mascotas}">
+                        <td th:text="${mascota.numCliente}">1</td>
+                        <td th:text="${mascota.nombre}">Max</td>
+                        <td th:text="${mascota.raza != null ? mascota.raza.nombreRaza : 'Sin raza'}">Labrador</td>
+                        <td th:text="${mascota.color}">Marrón</td>
+                        <td th:text="${mascota.alergico}">NO</td>
+                        <td th:text="${mascota.unduenio != null ? mascota.unduenio.nombre : '-'}">Juan Pérez</td>
+                        <td th:text="${mascota.unduenio != null ? mascota.unduenio.celDuenio : '-'}">3512345678</td>
+                        <td>
+                            <div class="actions">
+								<a th:href="@{/mascotas/{id}(id=${mascota.numCliente})}"
+								   class="btn btn-small" 
+								   style="background: #17a2b8; color: white;">👁️ Ver</a>
+								<a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}" 
+                                   class="btn btn-edit btn-small">✏️ Editar</a>
+                                <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}" 
+                                   class="btn btn-delete btn-small"
+                                   onclick="return confirm('¿Está seguro que desea eliminar esta mascota?')">
+                                   🗑️ Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estado vacío -->
+        <div th:if="${mascotas.empty}" class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <h2>No hay mascotas registradas</h2>
+            <p>Haga clic en "Nueva Mascota" para agregar la primera</p>
+        </div>
+    </div>
+</body>
+</html>
