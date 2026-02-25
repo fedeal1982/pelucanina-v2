@@ -17,9 +17,11 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-    </properties>
+   <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>   <!-- AGREGAR ESTA -->
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  <!-- Y ESTA -->
+   </properties>
 
     <dependencies>
         <!-- Spring Boot Web -->
