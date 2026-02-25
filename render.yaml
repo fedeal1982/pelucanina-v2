@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: pelucanina
+    runtime: java
+    buildCommand: ./mvnw -DskipTests clean package
+    startCommand: java -jar target/pelucanina-web-1.0-SNAPSHOT.jar
+    envVars:
+      - key: DATABASE_URL
+        sync: false
