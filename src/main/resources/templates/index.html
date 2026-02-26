@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -169,13 +170,14 @@
                 <div class="description">Mascotas eliminadas</div>
             </a>
 
-			<a href="/razas" class="menu-item">
+			<a href="/usuarios" class="menu-item" sec:authorize="hasRole('ADMIN')">
 			    <div class="icon">⚙️</div>
 			    <div class="title">Configuración</div>
 			    <div class="description">Gestionar razas</div>
 			</a>
 			
-			<a href="/usuarios" class="menu-item">
+			<a href="/usuarios" class="menu-item"
+			   th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 			    <div class="icon">👥</div>
 			    <div class="title">Usuarios</div>
 			    <div class="description">Gestionar accesos</div>
