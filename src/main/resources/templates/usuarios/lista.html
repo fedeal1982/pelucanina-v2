@@ -155,6 +155,12 @@
                                th:onclick="'return confirm(\'¿Cambiar rol a ' + (${usuario.rol == 'ADMIN'} ? 'EMPLEADO' : 'ADMIN') + '?\')'">
                                🔄 Cambiar Rol
                             </a>
+							
+							<a th:href="@{/usuarios/eliminar/{id}(id=${usuario.id})}"
+							   class="btn btn-danger btn-sm"
+							   onclick="return confirm('¿Eliminar este usuario? Esta acción no se puede deshacer.')">
+							   🗑️ Eliminar
+							</a>
                         </div>
 
                         <!-- Si es el usuario actual, no mostrar acciones -->

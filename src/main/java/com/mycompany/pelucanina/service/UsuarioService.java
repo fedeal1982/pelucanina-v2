@@ -95,4 +95,8 @@ public class UsuarioService implements UserDetailsService {
     public Usuario guardar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }
+    
+    public void eliminar(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 }

@@ -72,4 +72,21 @@ public class UsuarioController {
         });
         return "redirect:/usuarios";
     }
+    
+ // GET /usuarios/eliminar/{id}
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable Long id, Authentication auth,
+                           RedirectAttributes redirectAttributes) {
+        usuarioService.obtenerPorId(id).ifPresent(usuario -> {
+            if (usuario.getUsername().equals(auth.getName())) {
+                redirectAttributes.addFlashAttribute("mensajeError",
+                    "No podés eliminar tu propio usuario");
+                return;
+            }
+            usuarioService.eliminar(id);
+            redirectAttributes.addFlashAttribute("mensajeExito",
+                "Usuario eliminado correctamente");
+        });
+        return "redirect:/usuarios";
+    }
 }
