@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario - Peluquería Canina</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container {
+            background: white; border-radius: 20px; padding: 30px;
+            max-width: 1000px; margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 5px; font-size: 28px; }
+        .subtitle { color: #888; margin-bottom: 20px; font-size: 14px; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        .btn {
+            padding: 10px 18px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; font-size: 14px; display: inline-block;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #555; }
+        .dias-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .dia-header {
+            text-align: center; font-weight: 700; font-size: 12px;
+            color: #667eea; padding: 8px; text-transform: uppercase;
+        }
+        .dia-cell {
+            min-height: 100px; border: 2px solid #eee; border-radius: 10px;
+            padding: 8px; background: #fafafa;
+        }
+        .dia-cell.hoy { border-color: #667eea; background: #f0f4ff; }
+        .dia-numero { font-weight: 700; font-size: 13px; color: #444; margin-bottom: 5px; }
+        .turno-item {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; border-radius: 6px; padding: 4px 6px;
+            font-size: 10px; margin-bottom: 3px; cursor: pointer;
+        }
+        .turno-item.completado { background: linear-gradient(135deg, #28a745, #20c997); }
+        .turno-item.cancelado { background: #aaa; }
+        .turno-hora { font-weight: 700; }
+        .turno-mascota { opacity: 0.9; }
+        .empty-state { text-align: center; padding: 30px; color: #aaa; }
+        .leyenda { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; font-size: 12px; }
+        .leyenda-item { display: flex; align-items: center; gap: 6px; }
+        .leyenda-color { width: 14px; height: 14px; border-radius: 4px; }
+        @media (max-width: 600px) {
+            .dias-grid { grid-template-columns: repeat(2, 1fr); }
+            .dia-header:nth-child(n+3) { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>🗓️ Calendario</h1>
+            <p class="subtitle">Próximos 7 días</p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="/turnos/nuevo" class="btn btn-primary">➕ Nuevo Turno</a>
+            <a href="/turnos" class="btn btn-secondary">📋 Ver Lista</a>
+            <a href="/" class="btn btn-secondary">← Volver</a>
+        </div>
+    </div>
+
+    <!-- Calendario dinámico generado con JS -->
+    <div id="calendario"></div>
+
+    <div class="leyenda">
+        <div class="leyenda-item">
+            <div class="leyenda-color" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
+            <span>Pendiente</span>
+        </div>
+        <div class="leyenda-item">
+            <div class="leyenda-color" style="background: #28a745;"></div>
+            <span>Completado</span>
+        </div>
+        <div class="leyenda-item">
+            <div class="leyenda-color" style="background: #aaa;"></div>
+            <span>Cancelado</span>
+        </div>
+    </div>
+</div>
+
+<!-- Pasar datos de Thymeleaf a JS -->
+<script th:inline="javascript">
+    const turnos = /*[[${turnos}]]*/ [];
+</script>
+
+<script>
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const hoy = new Date();
+
+    function formatFecha(date) {
+        return date.toISOString().split('T')[0];
+    }
+
+    function renderCalendario() {
+        const cal = document.getElementById('calendario');
+        let html = '<div class="dias-grid">';
+
+        // Headers
+        diasSemana.forEach(d => {
+            html += `<div class="dia-header">${d}</div>`;
+        });
+
+        // Celdas de los 7 días
+        for (let i = 0; i < 7; i++) {
+            const fecha = new Date(hoy);
+            fecha.setDate(hoy.getDate() + i);
+            const fechaStr = formatFecha(fecha);
+            const esHoy = i === 0;
+
+            const turnosDia = turnos.filter(t => {
+                const tf = t.fechaHora ? t.fechaHora.substring(0, 10) : '';
+                return tf === fechaStr;
+            });
+
+            html += `<div class="dia-cell ${esHoy ? 'hoy' : ''}">`;
+            html += `<div class="dia-numero">${fecha.getDate()}/${fecha.getMonth() + 1}</div>`;
+
+            turnosDia.forEach(t => {
+                const hora = t.fechaHora ? t.fechaHora.substring(11, 16) : '';
+                const clase = t.estado === 'COMPLETADO' ? 'completado' : t.estado === 'CANCELADO' ? 'cancelado' : '';
+                const mascota = t.mascota ? t.mascota.nombre : '';
+                html += `<a href="/turnos/editar/${t.id}" style="text-decoration:none;">
+                    <div class="turno-item ${clase}">
+                        <div class="turno-hora">${hora}</div>
+                        <div class="turno-mascota">${mascota}</div>
+                    </div>
+                </a>`;
+            });
+
+            html += '</div>';
+        }
+
+        html += '</div>';
+        cal.innerHTML = html;
+    }
+
+    renderCalendario();
+</script>
+</body>
+</html>

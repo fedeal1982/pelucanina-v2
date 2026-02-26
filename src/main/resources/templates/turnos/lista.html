@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnos - Peluquería Canina</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 20px; font-size: 28px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .btn {
+            padding: 10px 18px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; cursor: pointer; border: none; font-size: 14px; display: inline-block;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #555; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .filtros { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .filtro-btn {
+            padding: 7px 15px; border-radius: 20px; border: 2px solid #667eea;
+            background: white; color: #667eea; cursor: pointer; text-decoration: none;
+            font-size: 13px; font-weight: 600;
+        }
+        .filtro-btn.activo { background: #667eea; color: white; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px; text-align: left; font-size: 13px; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
+        tr:hover { background: #f8f9ff; }
+        .badge {
+            padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        }
+        .badge-pendiente { background: #fff3cd; color: #856404; }
+        .badge-completado { background: #d4edda; color: #155724; }
+        .badge-cancelado { background: #f8d7da; color: #721c24; }
+        .actions { display: flex; gap: 5px; flex-wrap: wrap; }
+        .alert-success { background: #d4edda; color: #155724; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .empty-state { text-align: center; padding: 40px; color: #aaa; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
+        @media (max-width: 600px) {
+            th:nth-child(4), td:nth-child(4),
+            th:nth-child(5), td:nth-child(5) { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📅 Turnos</h1>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="/turnos/calendario" class="btn btn-secondary">🗓️ Ver Calendario</a>
+            <a href="/turnos/nuevo" class="btn btn-primary">➕ Nuevo Turno</a>
+            <a href="/" class="btn btn-secondary">← Volver</a>
+        </div>
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert-success" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+        <a th:href="@{/turnos}" th:class="${estadoFiltro == '' ? 'filtro-btn activo' : 'filtro-btn'}">Todos</a>
+        <a th:href="@{/turnos(estado='PENDIENTE')}" th:class="${estadoFiltro == 'PENDIENTE' ? 'filtro-btn activo' : 'filtro-btn'}">⏳ Pendientes</a>
+        <a th:href="@{/turnos(estado='COMPLETADO')}" th:class="${estadoFiltro == 'COMPLETADO' ? 'filtro-btn activo' : 'filtro-btn'}">✅ Completados</a>
+        <a th:href="@{/turnos(estado='CANCELADO')}" th:class="${estadoFiltro == 'CANCELADO' ? 'filtro-btn activo' : 'filtro-btn'}">❌ Cancelados</a>
+    </div>
+
+    <div th:if="${!turnos.empty}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Mascota</th>
+                    <th>Servicio</th>
+                    <th>Empleado</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="turno : ${turnos}">
+                    <td th:text="${#temporals.format(turno.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td>
+                        <strong th:text="${turno.mascota.nombre}"></strong><br>
+                        <small th:if="${turno.mascota.unduenio != null}" th:text="${turno.mascota.unduenio.nombre}" style="color:#888;"></small>
+                    </td>
+                    <td th:text="${turno.servicio ?: '-'}"></td>
+                    <td th:text="${turno.empleado != null ? turno.empleado.nombreCompleto : '-'}"></td>
+                    <td th:text="${turno.precio != null ? '$' + turno.precio : '-'}"></td>
+                    <td>
+                        <span th:if="${turno.estado == 'PENDIENTE'}" class="badge badge-pendiente">⏳ Pendiente</span>
+                        <span th:if="${turno.estado == 'COMPLETADO'}" class="badge badge-completado">✅ Completado</span>
+                        <span th:if="${turno.estado == 'CANCELADO'}" class="badge badge-cancelado">❌ Cancelado</span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <a th:href="@{/turnos/editar/{id}(id=${turno.id})}" class="btn btn-secondary btn-sm">✏️</a>
+                            <a th:if="${turno.estado == 'PENDIENTE'}"
+                               th:href="@{/turnos/cambiar-estado/{id}/COMPLETADO(id=${turno.id})}"
+                               class="btn btn-success btn-sm">✅</a>
+                            <a th:if="${turno.estado == 'PENDIENTE'}"
+                               th:href="@{/turnos/cambiar-estado/{id}/CANCELADO(id=${turno.id})}"
+                               class="btn btn-warning btn-sm">❌</a>
+                            <a th:href="@{/turnos/eliminar/{id}(id=${turno.id})}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar este turno?')">🗑️</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${turnos.empty}" class="empty-state">
+        <div class="icon">📅</div>
+        <p>No hay turnos registrados</p>
+        <a href="/turnos/nuevo" class="btn btn-primary" style="margin-top:15px;">➕ Crear primer turno</a>
+    </div>
+</div>
+</body>
+</html>

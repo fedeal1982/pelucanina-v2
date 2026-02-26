@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turno - Peluquería Canina</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .container {
+            background: white; border-radius: 20px; padding: 35px;
+            max-width: 550px; width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; margin-bottom: 25px; font-size: 24px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 14px; }
+        input, select, textarea {
+            width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 14px; transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
+        textarea { resize: vertical; min-height: 80px; }
+        .btn {
+            padding: 12px 20px; border-radius: 10px; border: none;
+            font-weight: 600; cursor: pointer; font-size: 14px;
+            text-decoration: none; display: inline-block; text-align: center;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; width: 100%; margin-bottom: 10px; }
+        .btn-secondary { background: #f0f0f0; color: #555; width: 100%; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${turno != null ? '✏️ Editar Turno' : '➕ Nuevo Turno'}">Turno</h1>
+
+    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+
+    <form th:action="${turno != null ? '/turnos/editar/' + turno.id : '/turnos/nuevo'}" method="post">
+
+        <div class="form-group">
+            <label>Mascota *</label>
+            <select name="mascotaId" required>
+                <option value="">-- Seleccionar mascota --</option>
+                <option th:each="m : ${mascotas}"
+                        th:value="${m.numCliente}"
+                        th:text="${m.nombre + (m.unduenio != null ? ' (' + m.unduenio.nombre + ')' : '')}"
+                        th:selected="${turno != null && turno.mascota.numCliente == m.numCliente}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Fecha y Hora *</label>
+            <input type="datetime-local" name="fechaHora" required
+                   th:value="${turno != null ? #temporals.format(turno.fechaHora, 'yyyy-MM-dd''T''HH:mm') : ''}">
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <label>Servicio</label>
+                <select name="servicio">
+                    <option value="">-- Seleccionar --</option>
+                    <option value="Baño" th:selected="${turno != null && turno.servicio == 'Baño'}">Baño</option>
+                    <option value="Corte" th:selected="${turno != null && turno.servicio == 'Corte'}">Corte</option>
+                    <option value="Baño y corte" th:selected="${turno != null && turno.servicio == 'Baño y corte'}">Baño y corte</option>
+                    <option value="Deslanado" th:selected="${turno != null && turno.servicio == 'Deslanado'}">Deslanado</option>
+                    <option value="Antipulgas" th:selected="${turno != null && turno.servicio == 'Antipulgas'}">Antipulgas</option>
+                    <option value="Corte de uñas" th:selected="${turno != null && turno.servicio == 'Corte de uñas'}">Corte de uñas</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Precio</label>
+                <input type="number" name="precio" step="0.01" min="0" placeholder="0.00"
+                       th:value="${turno != null ? turno.precio : ''}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Empleado asignado</label>
+            <select name="empleadoId">
+                <option value="">-- Sin asignar --</option>
+                <option th:each="e : ${empleados}"
+                        th:value="${e.id}"
+                        th:text="${e.nombreCompleto}"
+                        th:selected="${turno != null && turno.empleado != null && turno.empleado.id == e.id}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Estado</label>
+            <select name="estado">
+                <option value="PENDIENTE" th:selected="${turno == null || turno.estado == 'PENDIENTE'}">⏳ Pendiente</option>
+                <option value="COMPLETADO" th:selected="${turno != null && turno.estado == 'COMPLETADO'}">✅ Completado</option>
+                <option value="CANCELADO" th:selected="${turno != null && turno.estado == 'CANCELADO'}">❌ Cancelado</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Observaciones</label>
+            <textarea name="observaciones" placeholder="Notas adicionales..."
+                      th:text="${turno != null ? turno.observaciones : ''}"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">💾 Guardar Turno</button>
+        <a href="/turnos" class="btn btn-secondary">← Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
