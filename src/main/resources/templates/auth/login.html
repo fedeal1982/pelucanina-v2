@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Peluquería Canina</title>
+    <title>Login - Servicio Integral para Mascotas</title>
     <style>
         * {
             margin: 0;
@@ -38,10 +38,10 @@
         }
 
         .subtitle {
-			text-align: center;
-			color: #667eea;
-			margin-bottom: 10px;
-			font-size: 32px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
         }
 
         .form-group {
@@ -143,8 +143,15 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>🐕 Bienvenido</h1>
-        <p class="subtitle">Peluquería Canina</p>
+        <h1>🐾 Bienvenido</h1>
+        <p class="subtitle">Servicio Integral para Mascotas</p>
+
+        <!-- Credenciales por defecto 
+        <div class="default-credentials">
+            <strong>Usuario por defecto:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>admin123</code>
+        </div> -->
 
         <!-- Mensajes -->
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
