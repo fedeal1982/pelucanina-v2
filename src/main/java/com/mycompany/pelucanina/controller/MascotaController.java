@@ -48,14 +48,11 @@ public class MascotaController {
     @GetMapping("/nueva")
     public String mostrarFormularioNuevo(Model model) {
         Mascota mascota = new Mascota();
-        mascota.setUnduenio(new Duenio()); // Inicializar dueño vacío
-        
-        List<Raza> razas = mascotaService.obtenerTodasLasRazas();
-        
+        mascota.setUnduenio(new Duenio());
+
         model.addAttribute("mascota", mascota);
-        model.addAttribute("razas", razas);
         model.addAttribute("esNuevo", true);
-        
+
         return "mascotas/formulario";
     }
 
@@ -64,29 +61,22 @@ public class MascotaController {
      * POST http://localhost:8080/mascotas
      */
     @PostMapping
-    public String guardarMascota(@ModelAttribute Mascota mascota, 
-                                @RequestParam Integer razaId,
+    public String guardarMascota(@ModelAttribute Mascota mascota,
                                 RedirectAttributes redirectAttributes) {
         try {
-            // Asignar la raza seleccionada
-            Optional<Raza> raza = mascotaService.obtenerRazaPorId(razaId);
-            raza.ifPresent(mascota::setRaza);
-            
-            // Guardar mascota (el dueño se guarda en cascada)
             mascotaService.guardarMascota(mascota);
-            
-            redirectAttributes.addFlashAttribute("mensajeExito", 
+
+            redirectAttributes.addFlashAttribute("mensajeExito",
                 "Mascota guardada correctamente");
-            
+
             return "redirect:/mascotas";
-            
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("mensajeError", 
+            redirectAttributes.addFlashAttribute("mensajeError",
                 "Error al guardar: " + e.getMessage());
             return "redirect:/mascotas/nueva";
         }
     }
-
     /**
      * Mostrar formulario para editar mascota
      * GET http://localhost:8080/mascotas/editar/1
@@ -94,17 +84,14 @@ public class MascotaController {
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditar(@PathVariable Integer id, Model model) {
         Optional<Mascota> mascotaOpt = mascotaService.obtenerMascotaPorId(id);
-        
+
         if (mascotaOpt.isEmpty()) {
             return "redirect:/mascotas";
         }
-        
-        List<Raza> razas = mascotaService.obtenerTodasLasRazas();
-        
+
         model.addAttribute("mascota", mascotaOpt.get());
-        model.addAttribute("razas", razas);
         model.addAttribute("esNuevo", false);
-        
+
         return "mascotas/formulario";
     }
 
@@ -115,23 +102,19 @@ public class MascotaController {
     @PostMapping("/editar/{id}")
     public String actualizarMascota(@PathVariable Integer id,
                                    @ModelAttribute Mascota mascota,
-                                   @RequestParam Integer razaId,
                                    RedirectAttributes redirectAttributes) {
         try {
             mascota.setNumCliente(id);
-            
-            Optional<Raza> raza = mascotaService.obtenerRazaPorId(razaId);
-            raza.ifPresent(mascota::setRaza);
-            
+
             mascotaService.actualizarMascota(mascota);
-            
-            redirectAttributes.addFlashAttribute("mensajeExito", 
+
+            redirectAttributes.addFlashAttribute("mensajeExito",
                 "Mascota actualizada correctamente");
-            
+
             return "redirect:/mascotas";
-            
+
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("mensajeError", 
+            redirectAttributes.addFlashAttribute("mensajeError",
                 "Error al actualizar: " + e.getMessage());
             return "redirect:/mascotas/editar/" + id;
         }
