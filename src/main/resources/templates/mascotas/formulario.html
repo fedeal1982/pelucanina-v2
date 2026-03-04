@@ -174,18 +174,7 @@
 				    <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}">
 				</div>
 
-                <div class="form-group">
-                    <label for="razaId" class="required">Raza</label>
-                    <select id="razaId" name="razaId" required>
-                        <option value="">Seleccione una raza</option>
-                        <option th:each="raza : ${razas}" 
-                                th:value="${raza.idRaza}" 
-                                th:text="${raza.nombreRaza}"
-                                th:selected="${mascota.raza != null && mascota.raza.idRaza == raza.idRaza}">
-                        </option>
-                    </select>
-                </div>
-
+				
                 <div class="form-group">
                     <label for="color">Color</label>
                     <input type="text" id="color" th:field="*{color}" 
