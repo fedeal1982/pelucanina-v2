@@ -193,6 +193,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
+						<th>Especie</th>
                         <th>Raza</th>
                         <th>Color</th>
                         <th>Alérgico</th>
@@ -205,6 +206,7 @@
                     <tr th:each="mascota : ${mascotas}">
                         <td th:text="${mascota.numCliente}">1</td>
                         <td th:text="${mascota.nombre}">Max</td>
+						<td th:text="${mascota.especie ?: '-'}"></td>
                         <td th:text="${mascota.raza != null ? mascota.raza.nombreRaza : 'Sin raza'}">Labrador</td>
                         <td th:text="${mascota.color}">Marrón</td>
                         <td th:text="${mascota.alergico}">NO</td>

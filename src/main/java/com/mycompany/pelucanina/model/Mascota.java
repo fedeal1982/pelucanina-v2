@@ -26,6 +26,12 @@ public class Mascota {
     @Column(length = 500)
     private String observaciones;
     
+    @Column(length = 50)
+    private String especie;
+
+    @Column(name = "fecha_nacimiento")
+    private java.time.LocalDate fechaNacimiento;
+    
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_duenio")
     private Duenio unduenio;
@@ -112,5 +118,21 @@ public class Mascota {
 
     public void setRaza(Raza raza) {
         this.raza = raza;
+    }
+    
+    public String getEspecie() {
+        return especie;
+    }
+
+    public void setEspecie(String especie) {
+        this.especie = especie;
+    }
+
+    public java.time.LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(java.time.LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
 }

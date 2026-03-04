@@ -134,6 +134,7 @@
             <div class="icon">🐕</div>
             <h1 th:text="${mascota.nombre}">Max</h1>
             <p class="raza" th:text="${mascota.raza != null ? mascota.raza.nombreRaza : 'Sin raza'}">Labrador</p>
+			<p class="raza" th:text="${mascota.especie != null ? mascota.especie : ''}"></p>
         </div>
 
         <div class="id-badge" th:text="'Cliente N° ' + ${mascota.numCliente}">Cliente N° 1</div>
@@ -142,7 +143,17 @@
         <div class="section">
             <div class="section-title">🐕 Datos de la Mascota</div>
 
-            <div class="field-row">
+			<div class="field-row">
+			    <span class="field-label">Especie</span>
+			    <span class="field-value" th:text="${mascota.especie ?: '-'}"></span>
+			</div>
+
+			<div class="field-row">
+			    <span class="field-label">Fecha de Nacimiento</span>
+			    <span class="field-value" th:text="${mascota.fechaNacimiento != null ? #temporals.format(mascota.fechaNacimiento, 'dd/MM/yyyy') : '-'}"></span>
+			</div>
+			
+			<div class="field-row">
                 <span class="field-label">Color</span>
                 <span class="field-value" th:text="${mascota.color ?: '-'}">Marrón</span>
             </div>
