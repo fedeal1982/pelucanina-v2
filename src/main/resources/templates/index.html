@@ -182,6 +182,12 @@
 			    <div class="description">Gestionar servicios</div>
 			</a>
 			
+			<a href="/historial" class="menu-item">
+			    <div class="icon">📋</div>
+			    <div class="title">Historial Clínico</div>
+			    <div class="description">Ver historial</div>
+			</a>
+			
 			<a href="/usuarios" class="menu-item"
 			   th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 			    <div class="icon">👥</div>
