@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial Clínico</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container {
+            background: white; border-radius: 20px; padding: 30px;
+            max-width: 900px; margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        h1 { color: #667eea; font-size: 26px; }
+        .mascota-info { background: #f8f9ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #667eea; }
+        .mascota-info h2 { color: #667eea; font-size: 20px; margin-bottom: 5px; }
+        .mascota-info p { color: #666; font-size: 13px; }
+        .btn {
+            padding: 10px 18px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; font-size: 14px; display: inline-block; border: none; cursor: pointer;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #555; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .consulta-card {
+            border: 1px solid #eee; border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; transition: box-shadow 0.2s;
+        }
+        .consulta-card:hover { box-shadow: 0 4px 15px rgba(102,126,234,0.15); }
+        .consulta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .consulta-fecha { font-weight: 700; color: #667eea; font-size: 15px; }
+        .consulta-vet { font-size: 12px; color: #888; }
+        .consulta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .campo { margin-bottom: 8px; }
+        .campo-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; margin-bottom: 2px; }
+        .campo-valor { font-size: 13px; color: #333; }
+        .proximo-control { background: #fff3cd; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #856404; margin-top: 8px; }
+        .actions { display: flex; gap: 5px; margin-top: 10px; }
+        .alert-success { background: #d4edda; color: #155724; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .empty-state { text-align: center; padding: 40px; color: #aaa; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
+        @media (max-width: 500px) { .consulta-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📋 Historial Clínico</h1>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a th:href="@{/historial/nuevo/{id}(id=${mascota.numCliente})}" class="btn btn-primary">➕ Nueva Consulta</a>
+            <a th:href="@{/mascotas/detalle/{id}(id=${mascota.numCliente})}" class="btn btn-secondary">← Volver</a>
+        </div>
+    </div>
+
+    <div class="mascota-info">
+        <h2>🐾 <span th:text="${mascota.nombre}"></span></h2>
+        <p th:text="${(mascota.especie ?: '') + (mascota.unduenio != null ? ' · Dueño: ' + mascota.unduenio.nombre : '')}"></p>
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert-success" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+
+    <div th:if="${!historial.empty}">
+        <div th:each="h : ${historial}" class="consulta-card">
+            <div class="consulta-header">
+                <span class="consulta-fecha" th:text="'📅 ' + #temporals.format(h.fechaConsulta, 'dd/MM/yyyy')"></span>
+                <span class="consulta-vet" th:if="${h.veterinario != null}" th:text="'👨‍⚕️ ' + h.veterinario.nombreCompleto"></span>
+            </div>
+
+            <div class="consulta-grid">
+                <div class="campo" th:if="${h.motivoConsulta}">
+                    <div class="campo-label">Motivo</div>
+                    <div class="campo-valor" th:text="${h.motivoConsulta}"></div>
+                </div>
+                <div class="campo" th:if="${h.diagnostico}">
+                    <div class="campo-label">Diagnóstico</div>
+                    <div class="campo-valor" th:text="${h.diagnostico}"></div>
+                </div>
+                <div class="campo" th:if="${h.tratamiento}">
+                    <div class="campo-label">Tratamiento</div>
+                    <div class="campo-valor" th:text="${h.tratamiento}"></div>
+                </div>
+                <div class="campo" th:if="${h.medicamentos}">
+                    <div class="campo-label">Medicamentos</div>
+                    <div class="campo-valor" th:text="${h.medicamentos}"></div>
+                </div>
+                <div class="campo" th:if="${h.peso != null}">
+                    <div class="campo-label">Peso</div>
+                    <div class="campo-valor" th:text="${h.peso + ' kg'}"></div>
+                </div>
+            </div>
+
+            <div th:if="${h.proximoControl != null}" class="proximo-control">
+                ⏰ Próximo control: <strong th:text="${#temporals.format(h.proximoControl, 'dd/MM/yyyy')}"></strong>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{/historial/editar/{id}(id=${h.id})}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                <a th:href="@{/historial/eliminar/{id}(id=${h.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar esta consulta?')">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${historial.empty}" class="empty-state">
+        <div class="icon">📋</div>
+        <p>No hay consultas registradas para esta mascota</p>
+        <a th:href="@{/historial/nuevo/{id}(id=${mascota.numCliente})}" class="btn btn-primary" style="margin-top:15px;">➕ Registrar primera consulta</a>
+    </div>
+</div>
+</body>
+</html>

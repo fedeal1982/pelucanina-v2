@@ -206,14 +206,16 @@
             </div>
         </div>
 
-        <!-- Botones -->
-        <div class="button-group">
-            <a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}" 
-               class="btn btn-warning">✏️ Editar</a>
-            <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}"
-               class="btn btn-danger"
-               onclick="return confirm('¿Mover esta mascota a la papelera?')">🗑️ Eliminar</a>
-        </div>
+		<!-- Botones -->
+		<div class="button-group">
+		    <a th:href="@{/historial/mascota/{id}(id=${mascota.numCliente})}"
+		       class="btn btn-primary">📋 Historial Clínico</a>
+		    <a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}"
+		       class="btn btn-warning">✏️ Editar</a>
+		    <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}"
+		       class="btn btn-danger"
+		       onclick="return confirm('¿Mover esta mascota a la papelera?')">🗑️ Eliminar</a>
+		</div>
     </div>
 </body>
 </html>
