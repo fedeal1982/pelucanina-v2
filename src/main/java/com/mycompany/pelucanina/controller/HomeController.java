@@ -1,6 +1,7 @@
 package com.mycompany.pelucanina.controller;
 
 import com.mycompany.pelucanina.service.MascotaService;
+import com.mycompany.pelucanina.service.VacunaService;
 import com.mycompany.pelucanina.service.TurnoService;
 import com.mycompany.pelucanina.service.UsuarioService;
 import org.springframework.stereotype.Controller;
@@ -13,12 +14,15 @@ public class HomeController {
     private final MascotaService mascotaService;
     private final TurnoService turnoService;
     private final UsuarioService usuarioService;
+    private final VacunaService vacunaService;
 
-    public HomeController(MascotaService mascotaService, TurnoService turnoService, UsuarioService usuarioService) {
-        this.mascotaService = mascotaService;
-        this.turnoService = turnoService;
-        this.usuarioService = usuarioService;
-    }
+    public HomeController(MascotaService mascotaService, TurnoService turnoService, 
+            UsuarioService usuarioService, VacunaService vacunaService) {
+    	this.mascotaService = mascotaService;
+    	this.turnoService = turnoService;
+    	this.usuarioService = usuarioService;
+    	this.vacunaService = vacunaService;
+}
 
     @GetMapping("/")
     public String home(Model model) {
@@ -26,6 +30,7 @@ public class HomeController {
         model.addAttribute("totalMascotas", mascotaService.contarMascotas());
         model.addAttribute("turnosHoy", turnoService.obtenerTurnosHoy().size());
         model.addAttribute("totalUsuarios", usuarioService.contarUsuarios());
+        model.addAttribute("vacunasVencidas", vacunaService.contarVacunasVencidas());
 
         return "index";
     }

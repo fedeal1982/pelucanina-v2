@@ -31,4 +31,8 @@ public class VacunaService {
     public void eliminar(Long id) {
         vacunaRepository.deleteById(id);
     }
+    
+    public long contarVacunasVencidas() {
+        return vacunaRepository.contarVacunasVencidas();
+    }
 }

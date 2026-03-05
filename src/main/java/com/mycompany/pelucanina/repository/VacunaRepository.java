@@ -1,6 +1,7 @@
 package com.mycompany.pelucanina.repository;
 
 import com.mycompany.pelucanina.model.Vacuna;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,8 @@ import java.util.List;
 @Repository
 public interface VacunaRepository extends JpaRepository<Vacuna, Long> {
     List<Vacuna> findByMascotaNumClienteOrderByFechaAplicacionDesc(Integer mascotaId);
+    
+    @Query("SELECT COUNT(v) FROM Vacuna v WHERE v.proximaDosis < CURRENT_DATE")
+    long contarVacunasVencidas();
 }
+

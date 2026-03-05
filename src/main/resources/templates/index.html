@@ -40,7 +40,7 @@
 		/* Stats */
 		.stats {
 		    display: grid;
-		    grid-template-columns: repeat(3, 1fr);
+		    grid-template-columns: repeat(4, 1fr);
 		    gap: 15px;
 		    margin-bottom: 35px;
 		}
@@ -131,7 +131,12 @@
             <div class="stat-number" th:text="${totalUsuarios}">0</div>
             <div class="stat-label">Usuarios Activos</div>
         </a>
-      
+		
+		<a href="/mascotas" class="stat-card" style="background: linear-gradient(135deg, #dc3545, #c82333);">
+		    <div class="stat-icon">⚠️</div>
+		    <div class="stat-number" th:text="${vacunasVencidas}">0</div>
+		    <div class="stat-label">Vacunas Vencidas</div>
+		</a>
     </div>
 
     <!-- Menú -->
