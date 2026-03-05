@@ -175,6 +175,12 @@
 			    <div class="title">Turnos</div>
 			    <div class="description">Gestionar agenda</div>
 			</a>
+			
+			<a href="/mascotas" class="menu-item">
+			    <div class="icon">📋</div>
+			    <div class="title">Historial</div>
+			    <div class="description">Historial clínico</div>
+			</a>
 
 			<a href="/servicios" class="menu-item">
 			    <div class="icon">🏥</div>
@@ -182,11 +188,6 @@
 			    <div class="description">Gestionar servicios</div>
 			</a>
 			
-			<a href="/historial/mascota" class="menu-item">
-			    <div class="icon">📋</div>
-			    <div class="title">Historial Clínico</div>
-			    <div class="description">Ver historial</div>
-			</a>
 			
 			<a href="/usuarios" class="menu-item"
 			   th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
