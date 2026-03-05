@@ -46,17 +46,20 @@
 
     <form th:action="${turno != null ? '/turnos/editar/' + turno.id : '/turnos/nuevo'}" method="post">
 
-        <div class="form-group">
-            <label>Mascota *</label>
-            <select name="mascotaId" required>
-                <option value="">-- Seleccionar mascota --</option>
-                <option th:each="m : ${mascotas}"
-                        th:value="${m.numCliente}"
-                        th:text="${m.nombre + (m.unduenio != null ? ' (' + m.unduenio.nombre + ')' : '')}"
-                        th:selected="${turno != null && turno.mascota.numCliente == m.numCliente}">
-                </option>
-            </select>
-        </div>
+		<div class="form-group">
+		    <label>Mascota *</label>
+		    <input type="text" id="buscadorMascota" placeholder="🔍 Buscar por nombre o dueño..."
+		           autocomplete="off" onkeyup="filtrarMascotas()">
+		    <select name="mascotaId" id="selectMascota" required size="5"
+		            style="margin-top:6px; border-radius:10px; border: 2px solid #e0e0e0;">
+		        <option value="">-- Seleccionar mascota --</option>
+		        <option th:each="m : ${mascotas}"
+		                th:value="${m.numCliente}"
+		                th:text="${m.nombre + (m.unduenio != null ? ' (' + m.unduenio.nombre + ')' : '')}"
+		                th:selected="${turno != null && turno.mascota.numCliente == m.numCliente}">
+		        </option>
+		    </select>
+		</div>
 
         <div class="form-group">
             <label>Fecha y Hora *</label>
@@ -124,5 +127,17 @@
         <a href="/turnos" class="btn btn-secondary">← Cancelar</a>
     </form>
 </div>
+
+<script>
+function filtrarMascotas() {
+    const filtro = document.getElementById('buscadorMascota').value.toLowerCase();
+    const select = document.getElementById('selectMascota');
+    const opciones = select.querySelectorAll('option');
+    opciones.forEach(op => {
+        if (op.value === '') return;
+        op.style.display = op.text.toLowerCase().includes(filtro) ? '' : 'none';
+    });
+}
+</script>
 </body>
 </html>
