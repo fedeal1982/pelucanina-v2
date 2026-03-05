@@ -57,8 +57,8 @@ public class TurnoService {
     }
     
     public List<Turno> obtenerTurnosHoy() {
-        LocalDateTime inicioDia = LocalDate.now().atStartOfDay();
-        LocalDateTime finDia = LocalDate.now().atTime(23, 59, 59);
+        java.time.LocalDateTime inicioDia = java.time.LocalDate.now().atStartOfDay();
+        java.time.LocalDateTime finDia = java.time.LocalDate.now().atTime(23, 59, 59);
         return turnoRepository.findByFechaHoraBetween(inicioDia, finDia);
     }
 }
