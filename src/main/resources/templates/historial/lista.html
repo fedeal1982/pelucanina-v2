@@ -73,7 +73,7 @@
     <div th:if="${!historial.empty}">
         <div th:each="h : ${historial}" class="consulta-card">
             <div class="consulta-header">
-                <span class="consulta-fecha" th:text="'📅 ' + #temporals.format(h.fechaConsulta, 'dd/MM/yyyy')"></span>
+				<span class="consulta-fecha" th:text="#temporals.format(h.fechaConsulta, 'dd/MM/yyyy')"></span>
                 <span class="consulta-vet" th:if="${h.veterinario != null}" th:text="'👨‍⚕️ ' + h.veterinario.nombreCompleto"></span>
             </div>
 
