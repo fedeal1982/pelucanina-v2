@@ -217,6 +217,8 @@
 		    <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}"
 		       class="btn btn-danger"
 		       onclick="return confirm('¿Mover esta mascota a la papelera?')">🗑️ Eliminar</a>
+			<a th:href="@{/pdf/mascota/{id}(id=${mascota.numCliente})}"
+			   class="btn btn-secondary">📄 Exportar PDF</a>
 		</div>
     </div>
 </body>
