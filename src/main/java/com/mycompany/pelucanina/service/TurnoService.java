@@ -55,4 +55,10 @@ public class TurnoService {
     public List<Turno> obtenerPorMascota(Integer mascotaId) {
         return turnoRepository.findByMascotaId(mascotaId);
     }
+    
+    public List<Turno> obtenerTurnosHoy() {
+        LocalDateTime inicioDia = LocalDate.now().atStartOfDay();
+        LocalDateTime finDia = LocalDate.now().atTime(23, 59, 59);
+        return turnoRepository.findByFechaHoraBetween(inicioDia, finDia);
+    }
 }
