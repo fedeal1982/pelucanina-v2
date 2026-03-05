@@ -8,6 +8,8 @@ import com.mycompany.pelucanina.repository.MascotaRepository;
 import com.mycompany.pelucanina.repository.RazaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.mycompany.pelucanina.repository.HistorialClinicoRepository;
+import com.mycompany.pelucanina.repository.VacunaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +25,21 @@ public class MascotaService {
     private final MascotaRepository mascotaRepository;
     private final RazaRepository razaRepository;
     private final MascotaEliminadaRepository mascotaEliminadaRepository;
+    private final HistorialClinicoRepository historialClinicoRepository;
+    private final VacunaRepository vacunaRepository;
 
     // Inyección de dependencias por constructor
-    public MascotaService(MascotaRepository mascotaRepository, 
-                         RazaRepository razaRepository,
-                         MascotaEliminadaRepository mascotaEliminadaRepository) {
-        this.mascotaRepository = mascotaRepository;
-        this.razaRepository = razaRepository;
-        this.mascotaEliminadaRepository = mascotaEliminadaRepository;
-    }
+    public MascotaService(MascotaRepository mascotaRepository,
+            RazaRepository razaRepository,
+            MascotaEliminadaRepository mascotaEliminadaRepository,
+            HistorialClinicoRepository historialClinicoRepository,
+            VacunaRepository vacunaRepository) {
+this.mascotaRepository = mascotaRepository;
+this.razaRepository = razaRepository;
+this.mascotaEliminadaRepository = mascotaEliminadaRepository;
+this.historialClinicoRepository = historialClinicoRepository;
+this.vacunaRepository = vacunaRepository;
+}
 
     // ========== OPERACIONES DE MASCOTA ==========
     
@@ -85,14 +93,19 @@ public class MascotaService {
      */
     public void eliminarMascota(Integer id) {
         Optional<Mascota> mascotaOpt = mascotaRepository.findById(id);
-        
         if (mascotaOpt.isPresent()) {
             Mascota mascota = mascotaOpt.get();
-            
+
+            // Eliminar historial y vacunas primero
+            historialClinicoRepository.deleteAll(
+                historialClinicoRepository.findByMascotaNumClienteOrderByFechaConsultaDesc(id));
+            vacunaRepository.deleteAll(
+                vacunaRepository.findByMascotaNumClienteOrderByFechaAplicacionDesc(id));
+
             // Crear copia en papelera
             MascotaEliminada mascotaEliminada = new MascotaEliminada(mascota);
             mascotaEliminadaRepository.save(mascotaEliminada);
-            
+
             // Eliminar la mascota original
             mascotaRepository.deleteById(id);
         }
