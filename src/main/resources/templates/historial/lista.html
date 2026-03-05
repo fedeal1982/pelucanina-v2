@@ -64,8 +64,8 @@
 
     <div class="mascota-info">
         <h2>🐾 <span th:text="${mascota.nombre}"></span></h2>
-        <p th:text="${(mascota.especie ?: '') + (mascota.unduenio != null ? ' · Dueño: ' + mascota.unduenio.nombre : '')}"></p>
-    </div>
+		<p th:text="${(mascota.especie != null ? mascota.especie : '') + (mascota.unduenio != null ? ' · Dueño: ' + mascota.unduenio.nombre : '')}"></p>
+	</div>
 
     <div th:if="${mensajeExito}" class="alert-success" th:text="${mensajeExito}"></div>
     <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
