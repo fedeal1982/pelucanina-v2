@@ -70,6 +70,7 @@
         }
         .badge-admin { background: #667eea; color: white; }
         .badge-empleado { background: #e9ecef; color: #495057; }
+		.badge-veterinario { background: #d4edda; color: #155724; }
         .badge-activo { background: #d4edda; color: #155724; }
         .badge-inactivo { background: #f8d7da; color: #721c24; }
         .tu-usuario {
@@ -117,10 +118,11 @@
 
                     <td th:text="${usuario.nombreCompleto}">Juan Pérez</td>
 
-                    <td>
-                        <span th:if="${usuario.rol == 'ADMIN'}" class="badge badge-admin">⭐ ADMIN</span>
-                        <span th:if="${usuario.rol == 'EMPLEADO'}" class="badge badge-empleado">👤 EMPLEADO</span>
-                    </td>
+					<td>
+					    <span th:if="${usuario.rol == 'ADMIN'}" class="badge badge-admin">⭐ ADMIN</span>
+					    <span th:if="${usuario.rol == 'EMPLEADO'}" class="badge badge-empleado">👤 EMPLEADO</span>
+					    <span th:if="${usuario.rol == 'VETERINARIO'}" class="badge badge-veterinario">🩺 VETERINARIO</span>
+					</td>
 
                     <td>
                         <span th:if="${usuario.activo}" class="badge badge-activo">✅ Activo</span>
@@ -150,11 +152,20 @@
                             </a>
 
                             <!-- Cambiar rol -->
-                            <a th:href="@{/usuarios/cambiar-rol/{id}(id=${usuario.id})}"
-                               class="btn btn-warning"
-                               th:onclick="'return confirm(\'¿Cambiar rol a ' + (${usuario.rol == 'ADMIN'} ? 'EMPLEADO' : 'ADMIN') + '?\')'">
-                               🔄 Cambiar Rol
-                            </a>
+							<a th:if="${usuario.rol != 'ADMIN'}"
+							   th:href="@{/usuarios/cambiar-rol/{id}(id=${usuario.id},nuevoRol='ADMIN')}"
+							   class="btn btn-primary"
+							   onclick="return confirm('¿Promover a ADMIN?')">⭐ Admin</a>
+
+							<a th:if="${usuario.rol != 'EMPLEADO'}"
+							   th:href="@{/usuarios/cambiar-rol/{id}(id=${usuario.id},nuevoRol='EMPLEADO')}"
+							   class="btn btn-secondary"
+							   onclick="return confirm('¿Cambiar a EMPLEADO?')">👤 Empleado</a>
+
+							<a th:if="${usuario.rol != 'VETERINARIO'}"
+							   th:href="@{/usuarios/cambiar-rol/{id}(id=${usuario.id},nuevoRol='VETERINARIO')}"
+							   class="btn btn-success"
+							   onclick="return confirm('¿Cambiar a VETERINARIO?')">🩺 Veterinario</a>
 							
 							<a th:href="@{/usuarios/eliminar/{id}(id=${usuario.id})}"
 							   class="btn btn-danger btn-sm"

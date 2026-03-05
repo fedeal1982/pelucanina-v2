@@ -57,7 +57,9 @@ public class UsuarioController {
 
     // GET /usuarios/cambiar-rol/{id}
     @GetMapping("/cambiar-rol/{id}")
-    public String cambiarRol(@PathVariable Long id, Authentication auth,
+    public String cambiarRol(@PathVariable Long id,
+                             @RequestParam String nuevoRol,
+                             Authentication auth,
                              RedirectAttributes redirectAttributes) {
         usuarioService.obtenerPorId(id).ifPresent(usuario -> {
             if (usuario.getUsername().equals(auth.getName())) {
@@ -65,10 +67,10 @@ public class UsuarioController {
                     "No podés cambiar tu propio rol");
                 return;
             }
-            usuario.setRol(usuario.getRol().equals("ADMIN") ? "EMPLEADO" : "ADMIN");
+            usuario.setRol(nuevoRol);
             usuarioService.guardar(usuario);
             redirectAttributes.addFlashAttribute("mensajeExito",
-                "Rol actualizado correctamente");
+                "Rol actualizado a " + nuevoRol);
         });
         return "redirect:/usuarios";
     }
