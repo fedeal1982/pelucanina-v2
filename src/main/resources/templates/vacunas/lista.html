@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacunas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container {
+            background: white; border-radius: 20px; padding: 30px;
+            max-width: 900px; margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
+        h1 { color: #667eea; font-size: 26px; }
+        .mascota-info { background: #f8f9ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; border-left: 4px solid #667eea; }
+        .mascota-info h2 { color: #667eea; font-size: 20px; margin-bottom: 5px; }
+        .mascota-info p { color: #666; font-size: 13px; }
+        .btn {
+            padding: 10px 18px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; font-size: 14px; display: inline-block; border: none; cursor: pointer;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #555; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .vacuna-card {
+            border: 1px solid #eee; border-radius: 12px; padding: 20px;
+            margin-bottom: 15px; transition: box-shadow 0.2s;
+        }
+        .vacuna-card:hover { box-shadow: 0 4px 15px rgba(102,126,234,0.15); }
+        .vacuna-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .vacuna-nombre { font-weight: 700; color: #333; font-size: 16px; }
+        .vacuna-fecha { font-size: 13px; color: #667eea; font-weight: 600; }
+        .vacuna-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .campo { margin-bottom: 6px; }
+        .campo-label { font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; margin-bottom: 2px; }
+        .campo-valor { font-size: 13px; color: #333; }
+        .proxima-dosis { background: #fff3cd; border-radius: 8px; padding: 8px 12px; font-size: 12px; color: #856404; margin-top: 8px; }
+        .proxima-dosis.vencida { background: #f8d7da; color: #721c24; }
+        .actions { display: flex; gap: 5px; margin-top: 10px; }
+        .alert-success { background: #d4edda; color: #155724; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .empty-state { text-align: center; padding: 40px; color: #aaa; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
+        @media (max-width: 500px) { .vacuna-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>💉 Vacunas</h1>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a th:href="@{/vacunas/nuevo/{id}(id=${mascota.numCliente})}" class="btn btn-primary">➕ Nueva Vacuna</a>
+            <a href="/mascotas" class="btn btn-secondary">← Volver</a>
+        </div>
+    </div>
+
+    <div class="mascota-info">
+        <h2>🐾 <span th:text="${mascota.nombre}"></span></h2>
+        <p th:text="${(mascota.especie ?: '') + (mascota.unduenio != null ? ' · Dueño: ' + mascota.unduenio.nombre : '')}"></p>
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert-success" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+
+    <div th:if="${!vacunas.empty}">
+        <div th:each="v : ${vacunas}" class="vacuna-card">
+            <div class="vacuna-header">
+                <span class="vacuna-nombre">💉 <span th:text="${v.nombre}"></span></span>
+                <span class="vacuna-fecha" th:text="'Aplicada: ' + #temporals.format(v.fechaAplicacion, 'dd/MM/yyyy')"></span>
+            </div>
+
+            <div class="vacuna-grid">
+                <div class="campo" th:if="${v.veterinario != null}">
+                    <div class="campo-label">Veterinario</div>
+                    <div class="campo-valor" th:text="${v.veterinario.nombreCompleto}"></div>
+                </div>
+                <div class="campo" th:if="${v.observaciones}">
+                    <div class="campo-label">Observaciones</div>
+                    <div class="campo-valor" th:text="${v.observaciones}"></div>
+                </div>
+            </div>
+
+            <div th:if="${v.proximaDosis != null}"
+                 th:class="${v.proximaDosis.isBefore(#temporals.createToday()) ? 'proxima-dosis vencida' : 'proxima-dosis'}">
+                <span th:if="${v.proximaDosis.isBefore(#temporals.createToday())}">⚠️ Próxima dosis VENCIDA: </span>
+                <span th:if="${!v.proximaDosis.isBefore(#temporals.createToday())}">⏰ Próxima dosis: </span>
+                <strong th:text="${#temporals.format(v.proximaDosis, 'dd/MM/yyyy')}"></strong>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{/vacunas/editar/{id}(id=${v.id})}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                <a th:href="@{/vacunas/eliminar/{id}(id=${v.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar esta vacuna?')">🗑️ Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${vacunas.empty}" class="empty-state">
+        <div class="icon">💉</div>
+        <p>No hay vacunas registradas para esta mascota</p>
+        <a th:href="@{/vacunas/nuevo/{id}(id=${mascota.numCliente})}" class="btn btn-primary" style="margin-top:15px;">➕ Registrar primera vacuna</a>
+    </div>
+</div>
+</body>
+</html>

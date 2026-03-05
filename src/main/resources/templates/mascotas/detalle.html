@@ -210,6 +210,8 @@
 		<div class="button-group">
 		    <a th:href="@{/historial/mascota/{id}(id=${mascota.numCliente})}"
 		       class="btn btn-primary">📋 Historial Clínico</a>
+			<a th:href="@{/vacunas/mascota/{id}(id=${mascota.numCliente})}"
+			   class="btn btn-primary">💉 Vacunas</a>
 		    <a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}"
 		       class="btn btn-warning">✏️ Editar</a>
 		    <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}"
