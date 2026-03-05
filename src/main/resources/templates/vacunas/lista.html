@@ -74,7 +74,7 @@
         <div th:each="v : ${vacunas}" class="vacuna-card">
             <div class="vacuna-header">
                 <span class="vacuna-nombre">💉 <span th:text="${v.nombre}"></span></span>
-                <span class="vacuna-fecha" th:text="'Aplicada: ' + #temporals.format(v.fechaAplicacion, 'dd/MM/yyyy')"></span>
+                <span class="vacuna-fecha" th:text="${'Aplicada: ' + #temporals.format(v.fechaAplicacion, 'dd/MM/yyyy')}"></span>
             </div>
 
             <div class="vacuna-grid">
