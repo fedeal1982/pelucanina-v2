@@ -131,7 +131,7 @@
         <a href="/mascotas" class="back-link">← Volver a la lista</a>
 
         <div class="mascota-header">
-            <div class="icon">🐕</div>
+            <div class="icon" th:text="${mascota.especie == 'Perro' ? '🐕' : mascota.especie == 'Gato' ? '🐈' : mascota.especie == 'Conejo' ? '🐇' : mascota.especie == 'Ave' ? '🦜' : mascota.especie == 'Reptil' ? '🦎' : '🐾'}"></div>
             <h1 th:text="${mascota.nombre}">Max</h1>
 			<p class="raza" th:text="${mascota.especie != null ? mascota.especie : ''}"></p>
         </div>
