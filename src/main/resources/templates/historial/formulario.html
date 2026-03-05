@@ -50,8 +50,8 @@
         <div class="row">
 			<div class="form-group">
 			    <label>Fecha de consulta *</label>
-			    <input type="date" name="fechaConsulta" required
-			           th:value="${historial.fechaConsulta}">
+				<input type="date" name="fechaConsulta" required
+				       th:value="${historial.fechaConsulta != null ? historial.fechaConsulta : T(java.time.LocalDate).now()}">
 			</div>
             <div class="form-group">
                 <label>Peso (kg)</label>
