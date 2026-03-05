@@ -43,10 +43,7 @@ public class MascotaEliminada {
     
     @Column(name = "codigo_postal", length = 10)
     private String codigoPostal;
-    
-    @Column(name = "nombre_raza", length = 100)
-    private String nombreRaza;
-    
+        
     @Column(name = "eliminado_por", length = 100)
     private String eliminadoPor;
 
@@ -69,12 +66,8 @@ public class MascotaEliminada {
             this.direccion = mascota.getUnduenio().getDireccion();
             this.codigoPostal = mascota.getUnduenio().getCodigoPostal();
         }
-        
-        if (mascota.getRaza() != null) {
-            this.nombreRaza = mascota.getRaza().getNombreRaza();
-        }
     }
-
+    
     // Getters y Setters
     public Long getId() {
         return id;
@@ -170,14 +163,6 @@ public class MascotaEliminada {
 
     public void setCodigoPostal(String codigoPostal) {
         this.codigoPostal = codigoPostal;
-    }
-
-    public String getNombreRaza() {
-        return nombreRaza;
-    }
-
-    public void setNombreRaza(String nombreRaza) {
-        this.nombreRaza = nombreRaza;
     }
 
     public String getEliminadoPor() {

@@ -2,10 +2,8 @@ package com.mycompany.pelucanina.service;
 
 import com.mycompany.pelucanina.model.Mascota;
 import com.mycompany.pelucanina.model.MascotaEliminada;
-import com.mycompany.pelucanina.model.Raza;
 import com.mycompany.pelucanina.repository.MascotaEliminadaRepository;
 import com.mycompany.pelucanina.repository.MascotaRepository;
-import com.mycompany.pelucanina.repository.RazaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.mycompany.pelucanina.repository.HistorialClinicoRepository;
@@ -23,19 +21,16 @@ import java.util.Optional;
 public class MascotaService {
 
     private final MascotaRepository mascotaRepository;
-    private final RazaRepository razaRepository;
     private final MascotaEliminadaRepository mascotaEliminadaRepository;
     private final HistorialClinicoRepository historialClinicoRepository;
     private final VacunaRepository vacunaRepository;
 
     // Inyección de dependencias por constructor
     public MascotaService(MascotaRepository mascotaRepository,
-            RazaRepository razaRepository,
             MascotaEliminadaRepository mascotaEliminadaRepository,
             HistorialClinicoRepository historialClinicoRepository,
             VacunaRepository vacunaRepository) {
 this.mascotaRepository = mascotaRepository;
-this.razaRepository = razaRepository;
 this.mascotaEliminadaRepository = mascotaEliminadaRepository;
 this.historialClinicoRepository = historialClinicoRepository;
 this.vacunaRepository = vacunaRepository;
@@ -118,21 +113,7 @@ this.vacunaRepository = vacunaRepository;
         return mascotaRepository.count();
     }
 
-    // ========== OPERACIONES DE RAZAS ==========
-    
-    /**
-     * Obtener todas las razas
-     */
-    public List<Raza> obtenerTodasLasRazas() {
-        return razaRepository.findAll();
-    }
-
-    /**
-     * Buscar raza por ID
-     */
-    public Optional<Raza> obtenerRazaPorId(Integer id) {
-        return razaRepository.findById(id);
-    }
+ 
 
     // ========== OPERACIONES DE PAPELERA ==========
     
@@ -153,10 +134,6 @@ this.vacunaRepository = vacunaRepository;
         if (mascotaEliminadaOpt.isPresent()) {
             MascotaEliminada mascotaEliminada = mascotaEliminadaOpt.get();
             
-            // Buscar la raza por nombre
-            Optional<Raza> razaOpt = razaRepository.findAll().stream()
-                .filter(r -> r.getNombreRaza().equals(mascotaEliminada.getNombreRaza()))
-                .findFirst();
             
             // Crear nueva mascota restaurada
             Mascota mascota = new Mascota();
@@ -165,7 +142,6 @@ this.vacunaRepository = vacunaRepository;
             mascota.setAlergico(mascotaEliminada.getAlergico());
             mascota.setAtencionEspecial(mascotaEliminada.getAtencionEspecial());
             mascota.setObservaciones(mascotaEliminada.getObservaciones());
-            mascota.setRaza(razaOpt.orElse(null));
             
             // Recrear dueño
             if (mascotaEliminada.getNombreDuenio() != null) {

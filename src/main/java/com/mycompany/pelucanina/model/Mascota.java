@@ -35,24 +35,19 @@ public class Mascota {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_duenio")
     private Duenio unduenio;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_raza")
-    private Raza raza;
 
     // Constructores
     public Mascota() {
     }
 
     public Mascota(String nombre, String color, String alergico, String atencionEspecial, 
-                   String observaciones, Duenio unduenio, Raza raza) {
+                   String observaciones, Duenio unduenio) {
         this.nombre = nombre;
         this.color = color;
         this.alergico = alergico;
         this.atencionEspecial = atencionEspecial;
         this.observaciones = observaciones;
         this.unduenio = unduenio;
-        this.raza = raza;
     }
 
     // Getters y Setters
@@ -110,14 +105,6 @@ public class Mascota {
 
     public void setUnduenio(Duenio unduenio) {
         this.unduenio = unduenio;
-    }
-
-    public Raza getRaza() {
-        return raza;
-    }
-
-    public void setRaza(Raza raza) {
-        this.raza = raza;
     }
     
     public String getEspecie() {
