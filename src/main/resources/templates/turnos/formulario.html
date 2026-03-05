@@ -138,6 +138,12 @@ function filtrarMascotas() {
     });
     select.size = Math.max(2, [...opciones].filter(op => op.style.display !== 'none').length);
 }
+
+document.getElementById('selectMascota').addEventListener('change', function() {
+    const texto = this.options[this.selectedIndex].text;
+    document.getElementById('buscadorMascota').value = texto !== '-- Seleccionar mascota --' ? texto : '';
+    this.size = 1;
+});
 </script>
 </body>
 </html>
