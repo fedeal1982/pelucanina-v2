@@ -52,7 +52,6 @@
 		           autocomplete="off" onkeyup="filtrarMascotas()">
 		    <select name="mascotaId" id="selectMascota" required size="5"
 		            style="margin-top:6px; border-radius:10px; border: 2px solid #e0e0e0;">
-		        <option value="">-- Seleccionar mascota --</option>
 		        <option th:each="m : ${mascotas}"
 		                th:value="${m.numCliente}"
 		                th:text="${m.nombre + (m.unduenio != null ? ' (' + m.unduenio.nombre + ')' : '')}"
