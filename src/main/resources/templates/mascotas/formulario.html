@@ -158,7 +158,7 @@
 				
 				<div class="form-group">
 				    <label for="especie">Especie</label>
-				    <select id="especie" th:field="*{especie}">
+				    <select id="especie" name="especie" onchange="mostrarOtroEspecie(this)">
 				        <option value="">-- Seleccionar --</option>
 				        <option value="Perro">🐕 Perro</option>
 				        <option value="Gato">🐈 Gato</option>
@@ -167,6 +167,11 @@
 				        <option value="Reptil">🦎 Reptil</option>
 				        <option value="Otro">🐾 Otro</option>
 				    </select>
+				</div>
+
+				<div class="form-group" id="otroEspecieGroup" style="display:none;">
+				    <label for="especiePersonalizada">Especificá la especie</label>
+				    <input type="text" id="especiePersonalizada" placeholder="Ej: Hamster, Tortuga...">
 				</div>
 
 				<div class="form-group">
@@ -246,5 +251,22 @@
             </div>
         </form>
     </div>
+
+	<script>
+	function mostrarOtroEspecie(select) {
+	    const grupo = document.getElementById('otroEspecieGroup');
+	    const input = document.getElementById('especiePersonalizada');
+	    if (select.value === 'Otro') {
+	        grupo.style.display = 'block';
+	        input.setAttribute('required', 'required');
+	        input.addEventListener('input', function() {
+	            select.value = this.value || 'Otro';
+	        });
+	    } else {
+	        grupo.style.display = 'none';
+	        input.removeAttribute('required');
+	    }
+	}
+	</script>
 </body>
 </html>
