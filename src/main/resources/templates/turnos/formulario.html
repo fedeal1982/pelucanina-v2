@@ -50,7 +50,7 @@
 		    <label>Mascota *</label>
 		    <input type="text" id="buscadorMascota" placeholder="🔍 Buscar por nombre o dueño..."
 		           autocomplete="off" onkeyup="filtrarMascotas()">
-		    <select name="mascotaId" id="selectMascota" required size="5"
+		    <select name="mascotaId" id="selectMascota" required size="1"
 		            style="margin-top:6px; border-radius:10px; border: 2px solid #e0e0e0;">
 		        <option th:each="m : ${mascotas}"
 		                th:value="${m.numCliente}"
@@ -136,6 +136,7 @@ function filtrarMascotas() {
         if (op.value === '') return;
         op.style.display = op.text.toLowerCase().includes(filtro) ? '' : 'none';
     });
+    select.size = Math.max(2, [...opciones].filter(op => op.style.display !== 'none').length);
 }
 </script>
 </body>
