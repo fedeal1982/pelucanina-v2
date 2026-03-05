@@ -57,7 +57,7 @@
         <h1>📋 Historial Clínico</h1>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
             <a th:href="@{/historial/nuevo/{id}(id=${mascota.numCliente})}" class="btn btn-primary">➕ Nueva Consulta</a>
-            <a th:href="@{/mascotas/detalle/{id}(id=${mascota.numCliente})}" class="btn btn-secondary">← Volver</a>
+			<a href="/mascotas" class="btn btn-secondary">← Volver</a>
         </div>
     </div>
 
