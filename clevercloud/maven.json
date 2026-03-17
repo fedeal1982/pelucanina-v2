@@ -1,9 +1,10 @@
 {
   "build": {
     "type": "maven",
-    "goal": "package -DskipTests -Dmaven.test.skip=true"
+    "goal": "package -DskipTests"
   },
   "deploy": {
-    "jarName": "pelucanina-web-1.0-SNAPSHOT"
+    "jarName": "pelucanina-web-1.0-SNAPSHOT",
+    "runScript": "java -jar target/pelucanina-web-1.0-SNAPSHOT.jar"
   }
 }
