@@ -1,10 +1,6 @@
 {
   "build": {
     "type": "maven",
-    "goal": "package -DskipTests"
-  },
-  "deploy": {
-    "jarName": "pelucanina-web-1.0-SNAPSHOT",
-    "appIsSpringBoot": true
+    "goal": "spring-boot:run -DskipTests"
   }
 }
