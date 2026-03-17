@@ -4,6 +4,6 @@
     "goal": "package -DskipTests"
   },
   "deploy": {
-    "jarName": "pelucanina-web"
+    "jarName": "target/pelucanina-web-1.0-SNAPSHOT"
   }
 }
