@@ -1,0 +1,9 @@
+{
+  "build": {
+    "type": "maven",
+    "goal": "package -DskipTests"
+  },
+  "deploy": {
+    "jarName": "pelucanina-v2-1.0-SNAPSHOT"
+  }
+}
