@@ -1,5 +1,7 @@
 package com.mycompany.pelucanina.service;
 
+import com.mycompany.pelucanina.repository.TurnoRepository;
+import com.mycompany.pelucanina.model.Turno;
 import com.mycompany.pelucanina.model.Mascota;
 import com.mycompany.pelucanina.model.MascotaEliminada;
 import com.mycompany.pelucanina.repository.MascotaEliminadaRepository;
@@ -24,17 +26,20 @@ public class MascotaService {
     private final MascotaEliminadaRepository mascotaEliminadaRepository;
     private final HistorialClinicoRepository historialClinicoRepository;
     private final VacunaRepository vacunaRepository;
+    private final TurnoRepository turnoRepository;
 
     // Inyección de dependencias por constructor
     public MascotaService(MascotaRepository mascotaRepository,
             MascotaEliminadaRepository mascotaEliminadaRepository,
             HistorialClinicoRepository historialClinicoRepository,
-            VacunaRepository vacunaRepository) {
-this.mascotaRepository = mascotaRepository;
-this.mascotaEliminadaRepository = mascotaEliminadaRepository;
-this.historialClinicoRepository = historialClinicoRepository;
-this.vacunaRepository = vacunaRepository;
-}
+            VacunaRepository vacunaRepository,
+            TurnoRepository turnoRepository) {
+        this.mascotaRepository = mascotaRepository;
+        this.mascotaEliminadaRepository = mascotaEliminadaRepository;
+        this.historialClinicoRepository = historialClinicoRepository;
+        this.vacunaRepository = vacunaRepository;
+        this.turnoRepository = turnoRepository;
+    }
 
     // ========== OPERACIONES DE MASCOTA ==========
     
@@ -91,7 +96,13 @@ this.vacunaRepository = vacunaRepository;
         if (mascotaOpt.isPresent()) {
             Mascota mascota = mascotaOpt.get();
 
-            // Eliminar historial y vacunas primero
+            // Verificar si tiene turnos asociados
+            List<Turno> turnos = turnoRepository.findByMascotaId(id);
+            if (!turnos.isEmpty()) {
+                throw new RuntimeException("No se puede eliminar la mascota porque tiene turnos asociados. Eliminá los turnos primero.");
+            }
+
+            // Eliminar historial y vacunas
             historialClinicoRepository.deleteAll(
                 historialClinicoRepository.findByMascotaNumClienteOrderByFechaConsultaDesc(id));
             vacunaRepository.deleteAll(
