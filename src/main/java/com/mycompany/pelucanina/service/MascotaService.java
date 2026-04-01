@@ -153,6 +153,8 @@ public class MascotaService {
             mascota.setAlergico(mascotaEliminada.getAlergico());
             mascota.setAtencionEspecial(mascotaEliminada.getAtencionEspecial());
             mascota.setObservaciones(mascotaEliminada.getObservaciones());
+            mascota.setEspecie(mascotaEliminada.getEspecie());
+            mascota.setFechaNacimiento(mascotaEliminada.getFechaNacimiento());
             
             // Recrear dueño
             if (mascotaEliminada.getNombreDuenio() != null) {

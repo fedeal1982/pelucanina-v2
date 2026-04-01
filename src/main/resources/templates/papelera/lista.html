@@ -214,7 +214,9 @@
                         <th>Raza</th>
                         <th>Dueño</th>
                         <th>Celular</th>
-                        <th>Fecha Eliminación</th>
+						<th>Especie</th>
+						<th>Fecha Nacimiento</th>
+						<th>Fecha Eliminación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -224,6 +226,8 @@
                         <td>-</td>
                         <td th:text="${mascota.nombreDuenio ?: '-'}">Juan Pérez</td>
                         <td th:text="${mascota.celDuenio ?: '-'}">3512345678</td>
+						<td th:text="${mascota.especie ?: '-'}"></td>
+						<td th:text="${mascota.fechaNacimiento != null ? #temporals.format(mascota.fechaNacimiento, 'dd/MM/yyyy') : '-'}"></td>
                         <td>
                             <span class="date" 
                                   th:text="${#temporals.format(mascota.fechaEliminacion, 'dd/MM/yyyy HH:mm')}">

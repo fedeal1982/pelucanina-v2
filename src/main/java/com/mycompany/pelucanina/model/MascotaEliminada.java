@@ -46,6 +46,12 @@ public class MascotaEliminada {
         
     @Column(name = "eliminado_por", length = 100)
     private String eliminadoPor;
+    
+    @Column(length = 50)
+    private String especie;
+
+    @Column(name = "fecha_nacimiento")
+    private java.time.LocalDate fechaNacimiento;
 
     // Constructores
     public MascotaEliminada() {
@@ -59,6 +65,8 @@ public class MascotaEliminada {
         this.atencionEspecial = mascota.getAtencionEspecial();
         this.observaciones = mascota.getObservaciones();
         this.fechaEliminacion = LocalDateTime.now();
+        this.especie = mascota.getEspecie();
+        this.fechaNacimiento = mascota.getFechaNacimiento();
         
         if (mascota.getUnduenio() != null) {
             this.nombreDuenio = mascota.getUnduenio().getNombre();
@@ -172,4 +180,9 @@ public class MascotaEliminada {
     public void setEliminadoPor(String eliminadoPor) {
         this.eliminadoPor = eliminadoPor;
     }
+    
+    public String getEspecie() { return especie; }
+    public void setEspecie(String especie) { this.especie = especie; }
+    public java.time.LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(java.time.LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 }
