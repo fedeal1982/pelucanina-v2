@@ -211,7 +211,6 @@
                 <thead>
                     <tr>
                         <th>Nombre</th>
-                        <th>Raza</th>
                         <th>Dueño</th>
                         <th>Celular</th>
 						<th>Especie</th>
@@ -223,7 +222,6 @@
                 <tbody>
                     <tr th:each="mascota : ${mascotasEliminadas}">
                         <td th:text="${mascota.nombre}">Max</td>
-                        <td>-</td>
                         <td th:text="${mascota.nombreDuenio ?: '-'}">Juan Pérez</td>
                         <td th:text="${mascota.celDuenio ?: '-'}">3512345678</td>
 						<td th:text="${mascota.especie ?: '-'}"></td>
