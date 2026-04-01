@@ -221,7 +221,7 @@
                 <tbody>
                     <tr th:each="mascota : ${mascotasEliminadas}">
                         <td th:text="${mascota.nombre}">Max</td>
-                        <td th:text="${mascota.nombreRaza ?: 'Sin raza'}">Labrador</td>
+                        <td>-</td>
                         <td th:text="${mascota.nombreDuenio ?: '-'}">Juan Pérez</td>
                         <td th:text="${mascota.celDuenio ?: '-'}">3512345678</td>
                         <td>
