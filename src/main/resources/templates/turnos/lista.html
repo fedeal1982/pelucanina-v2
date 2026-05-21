@@ -4,94 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turnos - Peluquería Canina</title>
+    <title>Turnos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 { color: #667eea; margin-bottom: 20px; font-size: 28px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .btn {
-            padding: 10px 18px; border-radius: 10px; text-decoration: none;
-            font-weight: 600; cursor: pointer; border: none; font-size: 14px; display: inline-block;
-        }
-        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-        .btn-secondary { background: #f0f0f0; color: #555; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-warning { background: #ffc107; color: #333; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-sm { padding: 5px 10px; font-size: 12px; }
-        .filtros { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filtro-btn {
-            padding: 7px 15px; border-radius: 20px; border: 2px solid #667eea;
-            background: white; color: #667eea; cursor: pointer; text-decoration: none;
-            font-size: 13px; font-weight: 600;
-        }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px 0; }
+        .main-card { border-radius: 20px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .table thead th { border: none; }
+        .btn-grad { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; }
+        .btn-grad:hover { opacity: 0.9; color: white; }
+        .filtro-btn { border: 2px solid #667eea; color: #667eea; background: white; border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-block; }
         .filtro-btn.activo { background: #667eea; color: white; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 12px; text-align: left; font-size: 13px; }
-        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: middle; }
-        tr:hover { background: #f8f9ff; }
-        .badge {
-            padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-        }
-        .badge-pendiente { background: #fff3cd; color: #856404; }
-        .badge-completado { background: #d4edda; color: #155724; }
-        .badge-cancelado { background: #f8d7da; color: #721c24; }
-        .actions { display: flex; gap: 5px; flex-wrap: wrap; }
-        .alert-success { background: #d4edda; color: #155724; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
-        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
-        .empty-state { text-align: center; padding: 40px; color: #aaa; }
-        .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
-        @media (max-width: 600px) {
-            th:nth-child(4), td:nth-child(4),
-            th:nth-child(5), td:nth-child(5) { display: none; }
-        }
+        .filtro-btn:hover { background: #667eea; color: white; }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>📅 Turnos</h1>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <a href="/turnos/calendario" class="btn btn-secondary">🗓️ Ver Calendario</a>
-            <a href="/turnos/nuevo" class="btn btn-primary">➕ Nuevo Turno</a>
-            <a href="/" class="btn btn-secondary">← Volver</a>
+<div class="container py-3">
+<div class="card main-card p-4">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h1 class="h3 fw-bold mb-0" style="color:#667eea;">📅 Turnos</h1>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="/turnos/calendario" class="btn btn-secondary btn-sm fw-bold">🗓️ Calendario</a>
+            <a href="/turnos/nuevo" class="btn btn-grad btn-sm fw-bold">➕ Nuevo Turno</a>
+            <a href="/" class="btn btn-secondary btn-sm fw-bold">← Volver</a>
         </div>
     </div>
 
-    <div th:if="${mensajeExito}" class="alert-success" th:text="${mensajeExito}"></div>
-    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+    <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
 
     <!-- Filtros -->
-    <div class="filtros">
+    <div class="d-flex gap-2 flex-wrap mb-3">
         <a th:href="@{/turnos}" th:class="${estadoFiltro == '' ? 'filtro-btn activo' : 'filtro-btn'}">Todos</a>
         <a th:href="@{/turnos(estado='PENDIENTE')}" th:class="${estadoFiltro == 'PENDIENTE' ? 'filtro-btn activo' : 'filtro-btn'}">⏳ Pendientes</a>
         <a th:href="@{/turnos(estado='COMPLETADO')}" th:class="${estadoFiltro == 'COMPLETADO' ? 'filtro-btn activo' : 'filtro-btn'}">✅ Completados</a>
         <a th:href="@{/turnos(estado='CANCELADO')}" th:class="${estadoFiltro == 'CANCELADO' ? 'filtro-btn activo' : 'filtro-btn'}">❌ Cancelados</a>
     </div>
 
-    <div th:if="${!turnos.empty}">
-        <table>
+    <div th:if="${!turnos.empty}" class="table-responsive">
+        <table class="table table-hover align-middle">
             <thead>
                 <tr>
                     <th>Fecha y Hora</th>
                     <th>Mascota</th>
-                    <th>Servicio</th>
-                    <th>Empleado</th>
-                    <th>Precio</th>
+                    <th class="d-none d-md-table-cell">Servicio</th>
+                    <th class="d-none d-lg-table-cell">Empleado</th>
+                    <th class="d-none d-lg-table-cell">Precio</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -100,29 +60,34 @@
                 <tr th:each="turno : ${turnos}">
                     <td th:text="${#temporals.format(turno.fechaHora, 'dd/MM/yyyy HH:mm')}"></td>
                     <td>
-                        <strong th:text="${turno.mascota.nombre}"></strong><br>
-                        <small th:if="${turno.mascota.unduenio != null}" th:text="${turno.mascota.unduenio.nombre}" style="color:#888;"></small>
+                        <strong th:text="${turno.mascota.nombre}"></strong>
+                        <br><small class="text-muted" th:if="${turno.mascota.unduenio != null}"
+                                   th:text="${turno.mascota.unduenio.nombre}"></small>
                     </td>
-                    <td th:text="${turno.servicio ?: '-'}"></td>
-                    <td th:text="${turno.empleado != null ? turno.empleado.nombreCompleto : '-'}"></td>
-                    <td th:text="${turno.precio != null ? '$' + turno.precio : '-'}"></td>
+                    <td class="d-none d-md-table-cell" th:text="${turno.servicio ?: '-'}"></td>
+                    <td class="d-none d-lg-table-cell" th:text="${turno.empleado != null ? turno.empleado.nombreCompleto : '-'}"></td>
+                    <td class="d-none d-lg-table-cell" th:text="${turno.precio != null ? '$' + turno.precio : '-'}"></td>
                     <td>
-                        <span th:if="${turno.estado == 'PENDIENTE'}" class="badge badge-pendiente">⏳ Pendiente</span>
-                        <span th:if="${turno.estado == 'COMPLETADO'}" class="badge badge-completado">✅ Completado</span>
-                        <span th:if="${turno.estado == 'CANCELADO'}" class="badge badge-cancelado">❌ Cancelado</span>
+                        <span th:if="${turno.estado == 'PENDIENTE'}" class="badge bg-warning text-dark">⏳ Pendiente</span>
+                        <span th:if="${turno.estado == 'COMPLETADO'}" class="badge bg-success">✅ Completado</span>
+                        <span th:if="${turno.estado == 'CANCELADO'}" class="badge bg-danger">❌ Cancelado</span>
                     </td>
                     <td>
-                        <div class="actions">
-                            <a th:href="@{/turnos/editar/{id}(id=${turno.id})}" class="btn btn-secondary btn-sm">✏️</a>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <a th:href="@{/turnos/editar/{id}(id=${turno.id})}" class="btn btn-sm btn-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
                             <a th:if="${turno.estado == 'PENDIENTE'}"
                                th:href="@{/turnos/cambiar-estado/{id}/COMPLETADO(id=${turno.id})}"
-                               class="btn btn-success btn-sm">✅</a>
+                               class="btn btn-sm btn-success" title="Completar">✅</a>
                             <a th:if="${turno.estado == 'PENDIENTE'}"
                                th:href="@{/turnos/cambiar-estado/{id}/CANCELADO(id=${turno.id})}"
-                               class="btn btn-warning btn-sm">❌</a>
+                               class="btn btn-sm btn-warning" title="Cancelar">❌</a>
                             <a th:href="@{/turnos/eliminar/{id}(id=${turno.id})}"
-                               class="btn btn-danger btn-sm"
-                               onclick="return confirm('¿Eliminar este turno?')">🗑️</a>
+                               class="btn btn-sm btn-danger" title="Eliminar"
+                               onclick="return confirm('¿Eliminar este turno?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
                         </div>
                     </td>
                 </tr>
@@ -130,11 +95,14 @@
         </table>
     </div>
 
-    <div th:if="${turnos.empty}" class="empty-state">
-        <div class="icon">📅</div>
-        <p>No hay turnos registrados</p>
-        <a href="/turnos/nuevo" class="btn btn-primary" style="margin-top:15px;">➕ Crear primer turno</a>
+    <div th:if="${turnos.empty}" class="text-center py-5 text-muted">
+        <div style="font-size:48px;">📅</div>
+        <p class="mt-2">No hay turnos registrados</p>
+        <a href="/turnos/nuevo" class="btn btn-grad mt-2">➕ Crear primer turno</a>
     </div>
+
 </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

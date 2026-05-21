@@ -4,108 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta - Historial Clínico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh; padding: 20px;
-        }
-        .container {
-            background: white; border-radius: 20px; padding: 35px;
-            max-width: 650px; margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        h1 { color: #667eea; margin-bottom: 5px; font-size: 24px; }
-        .mascota-badge { background: #f0f4ff; color: #667eea; border-radius: 8px; padding: 6px 12px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 20px; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; font-size: 14px; }
-        input, select, textarea {
-            width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0;
-            border-radius: 10px; font-size: 14px; transition: border-color 0.2s;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #667eea; }
-        textarea { resize: vertical; min-height: 80px; }
-        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn {
-            padding: 12px 20px; border-radius: 10px; border: none;
-            font-weight: 600; cursor: pointer; font-size: 14px;
-            text-decoration: none; display: inline-block; text-align: center;
-        }
-        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; width: 100%; margin-bottom: 10px; }
-        .btn-secondary { background: #f0f0f0; color: #555; width: 100%; }
-        .alert-error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 10px; margin-bottom: 15px; }
-        @media (max-width: 480px) { .row { grid-template-columns: 1fr; } }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .main-card { border-radius: 20px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 650px; width: 100%; }
+        .btn-grad { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; }
+        .btn-grad:hover { opacity: 0.9; color: white; }
+        .form-control:focus, .form-select:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.15); }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 th:text="${esNuevo ? '➕ Nueva Consulta' : '✏️ Editar Consulta'}">Consulta</h1>
-    <div class="mascota-badge">🐾 <span th:text="${mascota.nombre}"></span></div>
+<div class="card main-card p-4">
+    <h1 class="h4 fw-bold mb-1" style="color:#667eea;"
+        th:text="${esNuevo ? '➕ Nueva Consulta' : '✏️ Editar Consulta'}">Consulta</h1>
+    <span class="badge mb-3" style="background:#f0f4ff; color:#667eea;">🐾 <span th:text="${mascota.nombre}"></span></span>
 
-    <div th:if="${mensajeError}" class="alert-error" th:text="${mensajeError}"></div>
+    <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
 
     <form th:action="${esNuevo ? '/historial/nuevo/' + mascota.numCliente : '/historial/editar/' + historial.id}" method="post">
-
-        <div class="row">
-			<div class="form-group">
-			    <label>Fecha de consulta *</label>
-				<input type="date" name="fechaConsulta" required
-				       th:value="${historial.fechaConsulta != null ? historial.fechaConsulta : T(java.time.LocalDate).now()}">
-			</div>
-            <div class="form-group">
-                <label>Peso (kg)</label>
-                <input type="number" name="peso" step="0.01" min="0" placeholder="Ej: 4.5"
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Fecha de consulta <span class="text-danger">*</span></label>
+                <input type="date" name="fechaConsulta" class="form-control" required
+                       th:value="${historial.fechaConsulta != null ? historial.fechaConsulta : T(java.time.LocalDate).now()}">
+            </div>
+            <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Peso (kg)</label>
+                <input type="number" name="peso" class="form-control" step="0.01" min="0" placeholder="Ej: 4.5"
                        th:value="${historial.peso}">
             </div>
         </div>
-
-        <div class="form-group">
-            <label>Motivo de consulta</label>
-            <textarea name="motivoConsulta" placeholder="¿Por qué viene hoy?"
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Motivo de consulta</label>
+            <textarea name="motivoConsulta" class="form-control" rows="2" placeholder="¿Por qué viene hoy?"
                       th:text="${historial.motivoConsulta}"></textarea>
         </div>
-
-        <div class="form-group">
-            <label>Diagnóstico</label>
-            <textarea name="diagnostico" placeholder="Diagnóstico del veterinario..."
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Diagnóstico</label>
+            <textarea name="diagnostico" class="form-control" rows="2"
                       th:text="${historial.diagnostico}"></textarea>
         </div>
-
-        <div class="form-group">
-            <label>Tratamiento indicado</label>
-            <textarea name="tratamiento" placeholder="Tratamiento a seguir..."
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Tratamiento indicado</label>
+            <textarea name="tratamiento" class="form-control" rows="2"
                       th:text="${historial.tratamiento}"></textarea>
         </div>
-
-        <div class="form-group">
-            <label>Medicamentos recetados</label>
-            <textarea name="medicamentos" placeholder="Medicamentos, dosis, frecuencia..."
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Medicamentos recetados</label>
+            <textarea name="medicamentos" class="form-control" rows="2" placeholder="Medicamentos, dosis, frecuencia..."
                       th:text="${historial.medicamentos}"></textarea>
         </div>
-
-        <div class="row">
-            <div class="form-group">
-                <label>Próximo control</label>
-                <input type="date" name="proximoControl"
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Próximo control</label>
+                <input type="date" name="proximoControl" class="form-control"
                        th:value="${historial.proximoControl}">
             </div>
-            <div class="form-group">
-                <label>Veterinarios</label>
-                <select name="veterinarioId">
+            <div class="col-12 col-md-6">
+                <label class="form-label fw-semibold">Veterinario</label>
+                <select name="veterinarioId" class="form-select">
                     <option value="">-- Sin asignar --</option>
-                    <option th:each="v : ${veterinarios}"
-                            th:value="${v.id}"
-                            th:text="${v.nombreCompleto}"
-                            th:selected="${historial.veterinario != null && historial.veterinario.id == v.id}">
-                    </option>
+                    <option th:each="v : ${veterinarios}" th:value="${v.id}" th:text="${v.nombreCompleto}"
+                            th:selected="${historial.veterinario != null && historial.veterinario.id == v.id}"></option>
                 </select>
             </div>
         </div>
-
-        <button type="submit" class="btn btn-primary">💾 Guardar Consulta</button>
-        <a th:href="@{/historial/mascota/{id}(id=${mascota.numCliente})}" class="btn btn-secondary">← Cancelar</a>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-grad fw-bold flex-fill">💾 Guardar Consulta</button>
+            <a th:href="@{/historial/mascota/{id}(id=${mascota.numCliente})}" class="btn btn-secondary fw-bold flex-fill">← Cancelar</a>
+        </div>
     </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

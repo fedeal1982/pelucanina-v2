@@ -4,237 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Mascotas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            color: #667eea;
-            font-size: 32px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        th {
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-small {
-            padding: 8px 15px;
-            font-size: 13px;
-        }
-
-        .btn-edit {
-            background: #ffc107;
-            color: #000;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .empty-state-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px 0; }
+        .main-card { border-radius: 20px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .table thead th { border: none; font-weight: 600; }
+        .btn-grad { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; }
+        .btn-grad:hover { opacity: 0.9; color: white; }
+        .back-link { color: #667eea; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; color: #667eea; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-link">← Volver al inicio</a>
+<div class="container py-3">
+<div class="card main-card p-4">
 
-        <div class="header">
-            <h1>📋 Lista de Mascotas</h1>
-            <a href="/mascotas/nueva" class="btn btn-primary">➕ Nueva Mascota</a>
-        </div>
-		
-		<!-- Barra de búsqueda -->
-		<form th:action="@{/mascotas}" method="get" style="margin-bottom: 20px; display: flex; gap: 10px;">
-		    <input type="text" name="buscar" th:value="${buscar}"
-		           placeholder="🔍 Buscar por nombre de mascota o dueño..."
-		           style="flex: 1; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 15px;">
-		    <button type="submit" class="btn btn-primary" style="padding: 12px 24px;">Buscar</button>
-		    <a href="/mascotas" class="btn btn-secondary" style="padding: 12px 24px; text-decoration: none; display: flex; align-items: center;">Limpiar</a>
-		</form>
+    <a href="/" class="back-link mb-3 d-inline-block">← Volver al inicio</a>
 
-		<!-- Resultado de búsqueda activa -->
-		<div th:if="${buscar}" style="margin-bottom: 15px; color: #667eea; font-weight: 600;">
-		    Mostrando resultados para: "<span th:text="${buscar}"></span>"
-		    — <span th:text="${mascotas.size()}">0</span> resultado(s)
-		</div>
-
-        <!-- Mensajes de éxito/error -->
-        <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
-        <div th:if="${mensajeError}" class="alert alert-error" th:text="${mensajeError}"></div>
-
-        <!-- Tabla de mascotas -->
-        <div th:if="${!mascotas.empty}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-						<th>Especie</th>
-                        <th>Color</th>
-                        <th>Alérgico</th>
-                        <th>Dueño</th>
-                        <th>Celular</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="mascota : ${mascotas}">
-                        <td th:text="${mascota.numCliente}">1</td>
-                        <td th:text="${mascota.nombre}">Max</td>
-						<td th:text="${mascota.especie ?: '-'}"></td>
-                        <td th:text="${mascota.color}">Marrón</td>
-                        <td th:text="${mascota.alergico}">NO</td>
-                        <td th:text="${mascota.unduenio != null ? mascota.unduenio.nombre : '-'}">Juan Pérez</td>
-                        <td th:text="${mascota.unduenio != null ? mascota.unduenio.celDuenio : '-'}">3512345678</td>
-                        <td>
-                            <div class="actions">
-								<a th:href="@{/mascotas/{id}(id=${mascota.numCliente})}"
-								   class="btn btn-small" 
-								   style="background: #17a2b8; color: white;">👁️ Ver</a>
-								<a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}" 
-                                   class="btn btn-edit btn-small">✏️ Editar</a>
-                                <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}" 
-                                   class="btn btn-delete btn-small"
-                                   onclick="return confirm('¿Está seguro que desea eliminar esta mascota?')">
-                                   🗑️ Eliminar
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Estado vacío -->
-        <div th:if="${mascotas.empty}" class="empty-state">
-            <div class="empty-state-icon">📭</div>
-            <h2>No hay mascotas registradas</h2>
-            <p>Haga clic en "Nueva Mascota" para agregar la primera</p>
-        </div>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h1 class="h3 fw-bold mb-0" style="color:#667eea;">📋 Lista de Mascotas</h1>
+        <a href="/mascotas/nueva" class="btn btn-grad fw-bold">
+            <i class="bi bi-plus-circle"></i> Nueva Mascota
+        </a>
     </div>
+
+    <!-- Buscador -->
+    <form th:action="@{/mascotas}" method="get" class="d-flex gap-2 mb-3 flex-wrap">
+        <input type="text" name="buscar" th:value="${buscar}" class="form-control"
+               placeholder="🔍 Buscar por nombre o dueño..." style="min-width:200px; flex:1;">
+        <button type="submit" class="btn btn-grad fw-bold">Buscar</button>
+        <a href="/mascotas" class="btn btn-secondary fw-bold">Limpiar</a>
+    </form>
+
+    <div th:if="${buscar}" class="mb-2 fw-semibold" style="color:#667eea;">
+        Resultados para: "<span th:text="${buscar}"></span>" —
+        <span th:text="${mascotas.size()}">0</span> resultado(s)
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
+    <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
+
+    <!-- Tabla -->
+    <div th:if="${!mascotas.empty}" class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th class="d-none d-md-table-cell">Especie</th>
+                    <th class="d-none d-md-table-cell">Color</th>
+                    <th class="d-none d-lg-table-cell">Alérgico</th>
+                    <th>Dueño</th>
+                    <th class="d-none d-lg-table-cell">Celular</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="mascota : ${mascotas}">
+                    <td th:text="${mascota.numCliente}"></td>
+                    <td class="fw-semibold" th:text="${mascota.nombre}"></td>
+                    <td class="d-none d-md-table-cell" th:text="${mascota.especie ?: '-'}"></td>
+                    <td class="d-none d-md-table-cell" th:text="${mascota.color ?: '-'}"></td>
+                    <td class="d-none d-lg-table-cell" th:text="${mascota.alergico ?: '-'}"></td>
+                    <td th:text="${mascota.unduenio != null ? mascota.unduenio.nombre : '-'}"></td>
+                    <td class="d-none d-lg-table-cell" th:text="${mascota.unduenio != null ? mascota.unduenio.celDuenio : '-'}"></td>
+                    <td>
+                        <div class="d-flex gap-1 flex-wrap">
+                            <a th:href="@{/mascotas/{id}(id=${mascota.numCliente})}"
+                               class="btn btn-sm btn-info text-white" title="Ver">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a th:href="@{/mascotas/editar/{id}(id=${mascota.numCliente})}"
+                               class="btn btn-sm btn-warning" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.numCliente})}"
+                               class="btn btn-sm btn-danger" title="Eliminar"
+                               onclick="return confirm('¿Eliminar esta mascota?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Estado vacío -->
+    <div th:if="${mascotas.empty}" class="text-center py-5 text-muted">
+        <div style="font-size:64px;">📭</div>
+        <h4>No hay mascotas registradas</h4>
+        <a href="/mascotas/nueva" class="btn btn-grad mt-3">➕ Nueva Mascota</a>
+    </div>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
