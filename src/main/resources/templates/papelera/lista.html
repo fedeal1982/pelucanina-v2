@@ -26,7 +26,7 @@
     <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
     <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
 
-	<div th:if="${!mascotas.isEmpty()}" class="table-responsive">
+    <div th:if="${mascotas != null and !mascotas.isEmpty()}" class="table-responsive">
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
@@ -66,7 +66,7 @@
         </table>
     </div>
 
-    <div th:if="${mascotas.empty}" class="text-center py-5 text-muted">
+    <div th:if="${mascotas == null or mascotas.isEmpty()}" class="text-center py-5 text-muted">
         <div style="font-size:64px;">🗑️</div>
         <h4>La papelera está vacía</h4>
     </div>
