@@ -18,6 +18,19 @@
         .btn-grad:hover { opacity: 0.9; color: white; }
         .back-link { color: #667eea; text-decoration: none; font-weight: 600; }
         .observaciones-box { background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; color: #856404; font-size: 14px; }
+		/* Animaciones */
+		@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+		@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+		@keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+		.main-card { animation: fadeInDown 0.5s ease; }
+		.section-box { animation: fadeInUp 0.4s ease both; }
+		.section-box:nth-child(1) { animation-delay: 0.1s; }
+		.section-box:nth-child(2) { animation-delay: 0.2s; }
+		.section-box:nth-child(3) { animation-delay: 0.3s; }
+		.text-center div[style] { animation: zoomIn 0.5s ease; }
+		.btn { transition: all 0.2s ease; }
+		.btn:hover { transform: translateY(-2px); }
+		.btn:active { transform: scale(0.96); }
     </style>
 </head>
 <body>
