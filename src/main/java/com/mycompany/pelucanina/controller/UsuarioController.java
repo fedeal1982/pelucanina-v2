@@ -75,7 +75,7 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
     
- // GET /usuarios/eliminar/{id}
+    // GET /usuarios/eliminar/{id}
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, Authentication auth,
                            RedirectAttributes redirectAttributes) {
@@ -88,6 +88,36 @@ public class UsuarioController {
             usuarioService.eliminar(id);
             redirectAttributes.addFlashAttribute("mensajeExito",
                 "Usuario eliminado correctamente");
+        });
+        return "redirect:/usuarios";
+    }
+    
+    // GET /usuarios/editar/{id}
+    @GetMapping("/editar/{id}")
+    public String mostrarEditar(@PathVariable Long id, Model model,
+                                RedirectAttributes redirectAttributes) {
+        return usuarioService.obtenerPorId(id).map(usuario -> {
+            model.addAttribute("usuario", usuario);
+            return "usuarios/formulario";
+        }).orElseGet(() -> {
+            redirectAttributes.addFlashAttribute("mensajeError", "Usuario no encontrado");
+            return "redirect:/usuarios";
+        });
+    }
+
+    // POST /usuarios/editar/{id}
+    @PostMapping("/editar/{id}")
+    public String guardarEdicion(@PathVariable Long id,
+                                 @RequestParam String nombreCompleto,
+                                 @RequestParam String rol,
+                                 @RequestParam(required = false) String email,
+                                 RedirectAttributes redirectAttributes) {
+        usuarioService.obtenerPorId(id).ifPresent(usuario -> {
+            usuario.setNombreCompleto(nombreCompleto);
+            usuario.setRol(rol);
+            usuario.setEmail(email);
+            usuarioService.guardar(usuario);
+            redirectAttributes.addFlashAttribute("mensajeExito", "Usuario actualizado correctamente");
         });
         return "redirect:/usuarios";
     }

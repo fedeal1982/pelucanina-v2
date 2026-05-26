@@ -65,6 +65,10 @@
                                onclick="return confirm('¿Desactivar este usuario?')">
                                 <i class="bi bi-person-x"></i>
                             </a>
+							<a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}"
+							   class="btn btn-sm btn-primary fw-bold" title="Editar">
+							    <i class="bi bi-pencil"></i>
+							</a>
                             <a th:unless="${usuario.activo}"
                                th:href="@{/usuarios/activar/{id}(id=${usuario.id})}"
                                class="btn btn-sm btn-success fw-bold">
