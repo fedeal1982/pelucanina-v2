@@ -1,12 +1,15 @@
 package com.mycompany.pelucanina.controller;
 
 import com.mycompany.pelucanina.model.Duenio;
+import com.mycompany.pelucanina.service.AuditoriaService;
+
 import com.mycompany.pelucanina.model.Mascota;
 import com.mycompany.pelucanina.service.MascotaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +19,11 @@ import java.util.Optional;
 public class MascotaController {
 
     private final MascotaService mascotaService;
+    private final AuditoriaService auditoriaService;
 
-    public MascotaController(MascotaService mascotaService) {
+    public MascotaController(MascotaService mascotaService, AuditoriaService auditoriaService) {
         this.mascotaService = mascotaService;
+        this.auditoriaService = auditoriaService;
     }
 
     /**
@@ -61,9 +66,11 @@ public class MascotaController {
      */
     @PostMapping
     public String guardarMascota(@ModelAttribute Mascota mascota,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes,
+                                Authentication authentication) {
         try {
             mascotaService.guardarMascota(mascota);
+            auditoriaService.registrar(authentication.getName(), "ALTA", "Mascota", "Nueva mascota: " + mascota.getNombre());
 
             redirectAttributes.addFlashAttribute("mensajeExito",
                 "Mascota guardada correctamente");
@@ -101,11 +108,12 @@ public class MascotaController {
     @PostMapping("/editar/{id}")
     public String actualizarMascota(@PathVariable Integer id,
                                    @ModelAttribute Mascota mascota,
-                                   RedirectAttributes redirectAttributes) {
+                                   RedirectAttributes redirectAttributes,
+                                   Authentication authentication) {
         try {
             mascota.setNumCliente(id);
-
             mascotaService.actualizarMascota(mascota);
+            auditoriaService.registrar(authentication.getName(), "MODIFICACION", "Mascota", "Modificó mascota: " + mascota.getNombre());
 
             redirectAttributes.addFlashAttribute("mensajeExito",
                 "Mascota actualizada correctamente");
@@ -119,22 +127,20 @@ public class MascotaController {
         }
     }
 
-    /**
-     * Eliminar mascota (mover a papelera)
-     * GET http://localhost:8080/mascotas/eliminar/1
-     */
     @GetMapping("/eliminar/{id}")
-    public String eliminarMascota(@PathVariable Integer id, 
-                                 RedirectAttributes redirectAttributes) {
+    public String eliminarMascota(@PathVariable Integer id,
+                                 RedirectAttributes redirectAttributes,
+                                 Authentication authentication) {
         try {
             mascotaService.eliminarMascota(id);
-            redirectAttributes.addFlashAttribute("mensajeExito", 
+            auditoriaService.registrar(authentication.getName(), "ELIMINACION", "Mascota", "Eliminó mascota ID: " + id);
+            redirectAttributes.addFlashAttribute("mensajeExito",
                 "Mascota movida a la papelera");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("mensajeError", 
+            redirectAttributes.addFlashAttribute("mensajeError",
                 "Error al eliminar: " + e.getMessage());
         }
-        
+
         return "redirect:/mascotas";
     }
     

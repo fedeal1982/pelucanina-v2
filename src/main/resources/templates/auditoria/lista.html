@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pista de Auditoría</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px 0; }
+        .main-card { border-radius: 20px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .table thead { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .table thead th { border: none; }
+        .back-link { color: #667eea; text-decoration: none; font-weight: 600; }
+        .badge-alta { background: #28a745; }
+        .badge-modificacion { background: #ffc107; color: #333; }
+        .badge-eliminacion { background: #dc3545; }
+        .badge-turno { background: #17a2b8; }
+        .badge-usuario { background: #6f42c1; }
+    </style>
+</head>
+<body>
+<div class="container py-3">
+<div class="card main-card p-4">
+
+    <a href="/" class="back-link mb-3 d-inline-block">← Volver al inicio</a>
+    <h1 class="h3 fw-bold mb-4" style="color:#667eea;">📋 Pista de Auditoría</h1>
+
+    <div th:if="${logs != null and !logs.isEmpty()}" class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Fecha y Hora</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th class="d-none d-md-table-cell">Entidad</th>
+                    <th class="d-none d-lg-table-cell">Detalle</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="log : ${logs}">
+                    <td th:text="${#temporals.format(log.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td><strong th:text="${log.usuario}"></strong></td>
+                    <td>
+                        <span th:if="${log.accion == 'ALTA'}" class="badge badge-alta">➕ ALTA</span>
+                        <span th:if="${log.accion == 'MODIFICACION'}" class="badge badge-modificacion">✏️ MODIFICACIÓN</span>
+                        <span th:if="${log.accion == 'ELIMINACION'}" class="badge badge-eliminacion">🗑️ ELIMINACIÓN</span>
+                        <span th:if="${log.accion == 'RESTAURACION'}" class="badge bg-success">♻️ RESTAURACIÓN</span>
+                        <span th:if="${log.accion == 'TURNO'}" class="badge badge-turno">📅 TURNO</span>
+                        <span th:if="${log.accion == 'USUARIO'}" class="badge badge-usuario">👤 USUARIO</span>
+                        <span th:if="${log.accion != 'ALTA' and log.accion != 'MODIFICACION' and log.accion != 'ELIMINACION' and log.accion != 'RESTAURACION' and log.accion != 'TURNO' and log.accion != 'USUARIO'}"
+                              class="badge bg-secondary" th:text="${log.accion}"></span>
+                    </td>
+                    <td class="d-none d-md-table-cell" th:text="${log.entidad}"></td>
+                    <td class="d-none d-lg-table-cell" th:text="${log.detalle}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${logs == null or logs.isEmpty()}" class="text-center py-5 text-muted">
+        <div style="font-size:64px;">📋</div>
+        <h4>No hay registros de auditoría</h4>
+    </div>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

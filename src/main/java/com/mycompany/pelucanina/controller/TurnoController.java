@@ -1,10 +1,12 @@
 package com.mycompany.pelucanina.controller;
 
 import com.mycompany.pelucanina.model.Turno;
+import com.mycompany.pelucanina.service.AuditoriaService;
 import com.mycompany.pelucanina.service.MascotaService;
 import com.mycompany.pelucanina.service.TurnoService;
 import com.mycompany.pelucanina.service.UsuarioService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,16 @@ public class TurnoController {
     private final TurnoService turnoService;
     private final MascotaService mascotaService;
     private final UsuarioService usuarioService;
+    private final AuditoriaService auditoriaService;
 
-    public TurnoController(TurnoService turnoService, MascotaService mascotaService, UsuarioService usuarioService) {
+    public TurnoController(TurnoService turnoService, MascotaService mascotaService,
+                           UsuarioService usuarioService, AuditoriaService auditoriaService) {
         this.turnoService = turnoService;
         this.mascotaService = mascotaService;
         this.usuarioService = usuarioService;
+        this.auditoriaService = auditoriaService;
     }
 
-    // GET /turnos - lista de turnos
     @GetMapping
     public String lista(@RequestParam(required = false) String estado, Model model) {
         if (estado != null && !estado.isEmpty()) {
@@ -40,14 +44,12 @@ public class TurnoController {
         return "turnos/lista";
     }
 
-    // GET /turnos/calendario - vista calendario
     @GetMapping("/calendario")
     public String calendario(Model model) {
         model.addAttribute("turnos", turnoService.obtenerProximos7Dias());
         return "turnos/calendario";
     }
 
-    // GET /turnos/nuevo - formulario nuevo turno
     @GetMapping("/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("mascotas", mascotaService.obtenerTodasLasMascotas());
@@ -55,7 +57,6 @@ public class TurnoController {
         return "turnos/formulario";
     }
 
-    // POST /turnos/nuevo - guardar nuevo turno
     @PostMapping("/nuevo")
     public String guardar(@RequestParam Integer mascotaId,
                           @RequestParam(required = false) Long empleadoId,
@@ -64,7 +65,8 @@ public class TurnoController {
                           @RequestParam(required = false) BigDecimal precio,
                           @RequestParam(defaultValue = "PENDIENTE") String estado,
                           @RequestParam(required = false) String observaciones,
-                          RedirectAttributes redirectAttributes) {
+                          RedirectAttributes redirectAttributes,
+                          Authentication authentication) {
         try {
             Turno turno = new Turno();
             turno.setFechaHora(fechaHora);
@@ -79,6 +81,8 @@ public class TurnoController {
             }
 
             turnoService.guardar(turno);
+            auditoriaService.registrar(authentication.getName(), "TURNO", "Turno",
+                "Nuevo turno para mascota ID: " + mascotaId + (servicio != null ? " - " + servicio : ""));
             redirectAttributes.addFlashAttribute("mensajeExito", "Turno creado correctamente");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("mensajeError", "Error al crear el turno: " + e.getMessage());
@@ -86,7 +90,6 @@ public class TurnoController {
         return "redirect:/turnos";
     }
 
-    // GET /turnos/editar/{id}
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         return turnoService.obtenerPorId(id).map(turno -> {
@@ -100,7 +103,6 @@ public class TurnoController {
         });
     }
 
-    // POST /turnos/editar/{id}
     @PostMapping("/editar/{id}")
     public String actualizar(@PathVariable Long id,
                              @RequestParam Integer mascotaId,
@@ -110,7 +112,8 @@ public class TurnoController {
                              @RequestParam(required = false) BigDecimal precio,
                              @RequestParam(defaultValue = "PENDIENTE") String estado,
                              @RequestParam(required = false) String observaciones,
-                             RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes,
+                             Authentication authentication) {
         turnoService.obtenerPorId(id).ifPresent(turno -> {
             turno.setFechaHora(fechaHora);
             turno.setServicio(servicio);
@@ -125,25 +128,31 @@ public class TurnoController {
             }
             turnoService.guardar(turno);
         });
+        auditoriaService.registrar(authentication.getName(), "MODIFICACION", "Turno",
+            "Modificó turno ID: " + id + (servicio != null ? " - " + servicio : ""));
         redirectAttributes.addFlashAttribute("mensajeExito", "Turno actualizado correctamente");
         return "redirect:/turnos";
     }
 
-    // GET /turnos/cambiar-estado/{id}/{estado}
     @GetMapping("/cambiar-estado/{id}/{estado}")
     public String cambiarEstado(@PathVariable Long id, @PathVariable String estado,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes,
+                                Authentication authentication) {
         turnoService.obtenerPorId(id).ifPresent(turno -> {
             turno.setEstado(estado);
             turnoService.guardar(turno);
         });
+        auditoriaService.registrar(authentication.getName(), "TURNO", "Turno",
+            "Cambió estado turno ID: " + id + " a " + estado);
         redirectAttributes.addFlashAttribute("mensajeExito", "Estado actualizado");
         return "redirect:/turnos";
     }
 
-    // GET /turnos/eliminar/{id}
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes,
+                           Authentication authentication) {
+        auditoriaService.registrar(authentication.getName(), "ELIMINACION", "Turno",
+            "Eliminó turno ID: " + id);
         turnoService.eliminar(id);
         redirectAttributes.addFlashAttribute("mensajeExito", "Turno eliminado correctamente");
         return "redirect:/turnos";

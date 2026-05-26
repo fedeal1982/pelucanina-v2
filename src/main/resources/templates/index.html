@@ -23,7 +23,6 @@
         .menu-title { font-size: 16px; font-weight: 700; color: #667eea; }
         .menu-desc { font-size: 12px; color: #888; }
         .section-label { font-size: 12px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 1px; }
-        .navbar-brand { color: #667eea !important; font-weight: 700; font-size: 20px; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px; }
     </style>
 </head>
@@ -107,18 +106,25 @@
                 <div class="menu-desc">Mascotas eliminadas</div>
             </a>
         </div>
-		<div class="col-6 col-md-4">
-		    <a href="/cambiar-password" class="menu-item">
-		        <div class="menu-icon">🔒</div>
-		        <div class="menu-title">Cambiar Contraseña</div>
-		        <div class="menu-desc">Actualizar mi clave</div>
-		    </a>
-		</div>
+        <div class="col-6 col-md-4">
+            <a href="/cambiar-password" class="menu-item">
+                <div class="menu-icon">🔒</div>
+                <div class="menu-title">Cambiar Contraseña</div>
+                <div class="menu-desc">Actualizar mi clave</div>
+            </a>
+        </div>
         <div class="col-6 col-md-4" sec:authorize="hasRole('ADMIN')">
             <a href="/usuarios" class="menu-item">
                 <div class="menu-icon">👥</div>
                 <div class="menu-title">Usuarios</div>
                 <div class="menu-desc">Gestionar accesos</div>
+            </a>
+        </div>
+        <div class="col-6 col-md-4" sec:authorize="hasRole('ADMIN')">
+            <a href="/auditoria" class="menu-item">
+                <div class="menu-icon">📋</div>
+                <div class="menu-title">Auditoría</div>
+                <div class="menu-desc">Registro de actividades</div>
             </a>
         </div>
     </div>
