@@ -20,7 +20,8 @@ public class DataInitializer implements CommandLineRunner {
                 "admin",
                 "admin123",
                 "Administrador",
-                "ADMIN"
+                "ADMIN",
+                null
             );
             System.out.println("✅ Usuario admin creado");
         }
