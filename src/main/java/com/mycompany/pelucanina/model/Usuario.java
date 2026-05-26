@@ -28,6 +28,15 @@ public class Usuario {
     
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
+    
+    @Column(unique = true, length = 150)
+    private String email;
+
+    @Column(name = "reset_token", length = 100)
+    private String resetToken;
+
+    @Column(name = "reset_token_expiry")
+    private LocalDateTime resetTokenExpiry;
 
     // Constructores
     public Usuario() {
@@ -99,4 +108,29 @@ public class Usuario {
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
+    
+    public String getEmail() { 
+    	return email; 
+    }
+    
+    public void setEmail(String email) { 
+    	this.email = email; 
+    }
+    
+    public String getResetToken() { 
+    	return resetToken; 
+    }
+    
+    public void setResetToken(String resetToken) { 
+    	this.resetToken = resetToken; 
+    }
+    
+    public LocalDateTime getResetTokenExpiry() { 
+    	return resetTokenExpiry; 
+    }
+    
+    public void setResetTokenExpiry(LocalDateTime resetTokenExpiry) { 
+    	this.resetTokenExpiry = resetTokenExpiry; 
+    }
+    
 }
