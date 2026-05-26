@@ -26,7 +26,7 @@
     <div th:if="${mensajeExito}" class="alert alert-success" th:text="${mensajeExito}"></div>
     <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
 
-    <div th:if="${!mascotas.empty}" class="table-responsive">
+	<div th:if="${!mascotas.isEmpty()}" class="table-responsive">
         <table class="table table-hover align-middle">
             <thead>
                 <tr>
