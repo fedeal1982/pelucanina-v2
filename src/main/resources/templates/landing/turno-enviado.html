@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turno Solicitado - Servicio Integral para Mascotas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; font-family: 'Segoe UI', sans-serif; }
+        .card { border-radius: 24px; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-width: 500px; width: 100%; padding: 50px 40px; text-align: center; }
+        .success-icon { font-size: 80px; animation: bounce 0.8s ease; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .success-title { font-size: 28px; font-weight: 800; color: #333; margin: 20px 0 10px; }
+        .success-msg { color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+        .info-box { background: #f0f4ff; border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: left; }
+        .info-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; color: #555; font-size: 14px; }
+        .btn-grad { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; padding: 14px 30px; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none; display: inline-block; transition: all 0.3s; }
+        .btn-grad:hover { transform: translateY(-2px); color: white; box-shadow: 0 8px 25px rgba(102,126,234,0.3); }
+        .btn-outline { border: 2px solid #667eea; color: #667eea; padding: 12px 30px; border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.3s; }
+        .btn-outline:hover { background: #667eea; color: white; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="success-icon">✅</div>
+    <h1 class="success-title">¡Solicitud enviada!</h1>
+    <p class="success-msg">
+        Gracias <strong th:text="${nombre}">cliente</strong>, recibimos tu solicitud de turno para <strong th:text="${servicio}">el servicio</strong>.
+        Nos pondremos en contacto pronto para confirmar tu turno.
+    </p>
+
+    <div class="info-box">
+        <div class="info-item">📞 Te contactaremos por teléfono o email</div>
+        <div class="info-item">⏰ Respondemos en menos de 24 horas</div>
+        <div class="info-item">📅 Confirmaremos fecha y hora exacta</div>
+    </div>
+
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="/inicio" class="btn-grad">🏠 Volver al inicio</a>
+        <a href="/solicitar-turno" class="btn-outline">📅 Otro turno</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
