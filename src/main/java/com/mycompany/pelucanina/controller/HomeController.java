@@ -42,33 +42,4 @@ public class HomeController {
         return "index";
     }
 
-    // Landing page pública
-    @GetMapping("/inicio")
-    public String landing() {
-        return "landing/inicio";
-    }
-
-    @GetMapping("/solicitar-turno")
-    public String solicitarTurno() {
-        return "landing/solicitar-turno";
-    }
-
-    @PostMapping("/solicitar-turno")
-    public String procesarTurno(@RequestParam String nombre,
-                                @RequestParam String email,
-                                @RequestParam String telefono,
-                                @RequestParam String servicio,
-                                @RequestParam String fecha,
-                                @RequestParam(required = false) String mascota,
-                                @RequestParam(required = false) String mensaje,
-                                RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("nombre", nombre);
-        redirectAttributes.addFlashAttribute("servicio", servicio);
-        return "redirect:/turno-enviado";
-    }
-
-    @GetMapping("/turno-enviado")
-    public String turnoEnviado() {
-        return "landing/turno-enviado";
-    }
 }
