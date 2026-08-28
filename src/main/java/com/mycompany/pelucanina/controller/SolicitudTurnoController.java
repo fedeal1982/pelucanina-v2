@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"https://pelucanina-landing.vercel.app", "http://localhost:3000"})
 public class SolicitudTurnoController {
 
     private final SolicitudTurnoRepository solicitudTurnoRepository;
