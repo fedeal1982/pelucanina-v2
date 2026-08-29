@@ -15,28 +15,31 @@ public class SecurityConfig {
     /**
      * Configuración de seguridad HTTP
      */
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-            	.requestMatchers("/", "/api/**", "/servicios", "/login", "/register", "/recuperar-password", "/reset-password", "/css/**", "/js/**", "/images/**").permitAll()
-            	.requestMatchers("/usuarios/**", "/auditoria/**").hasRole("ADMIN")
-            	.anyRequest().authenticated()
-        	)
-            .formLogin(form -> form
-            	.loginPage("/login")
-            	.defaultSuccessUrl("/admin", true)
-                .failureUrl("/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout=true")
-                .permitAll()
-            );
-        
-        return http.build();
-    }
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	    http
+	        .csrf(csrf -> csrf
+	            .ignoringRequestMatchers("/api/**")
+	        )
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/", "/api/**", "/servicios", "/login", "/register", "/recuperar-password", "/reset-password", "/css/**", "/js/**", "/images/**").permitAll()
+	            .requestMatchers("/usuarios/**", "/auditoria/**").hasRole("ADMIN")
+	            .anyRequest().authenticated()
+	        )
+	        .formLogin(form -> form
+	            .loginPage("/login")
+	            .defaultSuccessUrl("/admin", true)
+	            .failureUrl("/login?error=true")
+	            .permitAll()
+	        )
+	        .logout(logout -> logout
+	            .logoutUrl("/logout")
+	            .logoutSuccessUrl("/login?logout=true")
+	            .permitAll()
+	        );
+
+	    return http.build();
+	}
 
     /**
      * Encriptador de contraseñas (BCrypt)
